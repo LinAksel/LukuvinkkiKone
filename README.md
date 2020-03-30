@@ -1,2 +1,3 @@
 # LukuvinkkiKone
 Osallistujat: 
+Samuli Nikkilä
