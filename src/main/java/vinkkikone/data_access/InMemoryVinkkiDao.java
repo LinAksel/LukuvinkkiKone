@@ -10,10 +10,8 @@ public class InMemoryVinkkiDao implements VinkkiDao {
 
     public InMemoryVinkkiDao() {
         vinkit = new ArrayList<Vinkki>();
-        Vinkki u = new Vinkki();
-        
         vinkit.add(new Vinkki("Paroni von Münchhausen", "http://www.gutenberg.org/ebooks/48623"));
-    }        
+    }
 
     @Override
     public List<Vinkki> listAll() {
@@ -22,24 +20,24 @@ public class InMemoryVinkkiDao implements VinkkiDao {
 
     @Override
     public Vinkki findByTitle(String name) {
-        for (Vinkki user : vinkit) {
-            if (user.getTitle().equals(name)) {
-                return user;
+        for (Vinkki v : vinkit) {
+            if (v.getTitle().equals(name)) {
+                return v;
             }
         }
         return null;
     }
 
     @Override
-    public void add(Vinkki user) {
-        vinkit.add(user);
+    public void add(Vinkki v) {
+        vinkit.add(v);
     }
 
-    public void setUsers(List<Vinkki> users) {
-        this.vinkit = users;
+    public void setAll(List<Vinkki> all) {
+        this.vinkit = all;
     }
 
-    public List<Vinkki> getUsers() {
+    public List<Vinkki> getAll() {
         return vinkit;
     }
 }
