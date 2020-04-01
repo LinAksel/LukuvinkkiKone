@@ -1,10 +1,61 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Lukuvinkkikone</title>
-</head>
-<body>
-    #parse($template)
-</body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title id="title">Lukuvinkkikone</title>
+        <style>
+            body {
+                margin: 20;
+                font-family: Arial;
+            }
+            #list-wrapper {
+/*TODO*/
+            }
+            .navbar {
+                overflow: hidden;
+                background-color: #444;
+            }
+            .navbar a {
+                float: left;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+            .navbar a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            .navbar a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+            .footer {
+                background-color: #444;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                overflow: hidden;
+                padding: 15px;
+                text-align: center;    
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- NAVIGAATIO -->
+        <div class="navbar">
+            <a class="active" href="lukuvinkkikone">Koti</a>
+            <a href="addnew">Lisää uusi</a>
+            <a href="list">Lista</a>
+        </div>
+        #parse($template)
+        <div class="footer" id="footer">
+            <a href="https://github.com/LinAksel/LukuvinkkiKone" class="text-muted">GitHub-repo</a>
+        </div>
+    </body>
 </html>

@@ -1,23 +1,19 @@
 <h1>Lisää vinkki!</h1>
 
-<!-- AVUKSI vastaavaa koodia........ POISTA!
-
 #if( $error )
 <div id="error" style="color:red">
     <p><em>$error</em></p>
 </div>
 #end
 
-<form method="POST" action="/user">
-    <fieldset>
-        username: <input type="text" name="username" id="username" size="15"/>
-        <br/>
-        password: <input type="password" name="password" id="password" size="15"/>
-        <br/>     
-        password confirmation: <input type="password" name="passwordConfirmation" id="passwordConfirmation" size="15"/>
-        <br/>          
-        <input name="signup" type="submit" value="signup" />
-    </fieldset>
-<form>  
-    
-<p><a href="/">back to home</a></p>-->
+<div class="form">
+    <form method="POST" action="/addnew">
+        <label for="ftitle">Vinkin nimi:</label><br>
+        <input type="text" name="title" id="ftitle" size="100"/><br>
+        <label for="flink">Linkki:</label><br>
+        <input type="text" name="link" id="flink" size="100"/><br>
+        <br><br>
+        <input name="Lisää" type="submit" value="Lisää" /><br>
+    </form>  
+</div>
+<p><a href="/">Peruuta</a></p>
