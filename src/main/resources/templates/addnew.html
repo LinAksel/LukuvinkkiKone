@@ -6,14 +6,21 @@
 </div>
 #end
 
+#if( $note )
+<div id="note" style="color:green">
+    <p><em>$note</em></p>
+</div>
+#end
+
+
 <div class="form">
     <form method="POST" action="/addnew">
         <label for="ftitle">Vinkin nimi:</label><br>
-        <input type="text" name="title" id="ftitle" size="100"/><br>
+        <input type="text" name="title" id="ftitle" size="100" /><br>
         <label for="flink">Linkki:</label><br>
-        <input type="text" name="link" id="flink" size="100"/><br>
+        <input type="text" name="link" id="flink" size="100" /><br>
         <br><br>
-        <input name="Lisää" type="submit" value="Lisää" /><br>
-    </form>  
+        <input name="add" type="submit" value="Lisää" /><br>
+    </form>
 </div>
 <p><a href="/">Peruuta</a></p>

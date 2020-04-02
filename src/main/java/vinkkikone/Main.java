@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         port(findOutPort());
 
-        //index
+        // index
         get("/", (request, response) -> {
             HashMap<String, String> model = new HashMap<>();
             model.put("template", "templates/index.html");
@@ -31,29 +31,29 @@ public class Main {
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
-        //list
+        // list
         get("/list", (request, response) -> {
             HashMap<String, String> model = new HashMap<>();
             model.put("template", "templates/list.html");
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
-//        post("/list", (request, response) -> {
-//            HashMap<String, String> model = new HashMap<>();
-//            String title = request.queryParams("title");
-//            String link = request.queryParams("link");
-//
-//            if (!authenticationService().add(title, link)) {
-//                model.put("error", "Jotain meni pieleen. :(");
-//                model.put("template", "templates/addnew.html");
-//                return new ModelAndView(model, LAYOUT);
-//            }
-//            
-//            response.redirect("/");
-//            return new ModelAndView(model, LAYOUT);
-//        }, new VelocityTemplateEngine());
+        // post("/list", (request, response) -> {
+        // HashMap<String, String> model = new HashMap<>();
+        // String title = request.queryParams("title");
+        // String link = request.queryParams("link");
+        //
+        // if (!authenticationService().add(title, link)) {
+        // model.put("error", "Jotain meni pieleen. :(");
+        // model.put("template", "templates/addnew.html");
+        // return new ModelAndView(model, LAYOUT);
+        // }
+        //
+        // response.redirect("/");
+        // return new ModelAndView(model, LAYOUT);
+        // }, new VelocityTemplateEngine());
 
-        //addnew
+        // addnew
         get("/addnew", (request, response) -> {
             HashMap<String, String> model = new HashMap<>();
             model.put("template", "templates/addnew.html");
@@ -71,10 +71,11 @@ public class Main {
                 model.put("error", String.join(",  ", status.errors()));
                 model.put("template", "templates/addnew.html");
                 return new ModelAndView(model, LAYOUT);
+            } else {
+                model.put("note", String.join(",  ", status.notes()));
+                model.put("template", "templates/addnew.html");
+                return new ModelAndView(model, LAYOUT);
             }
-
-            response.redirect("/list");
-            return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
     }
 

@@ -7,11 +7,7 @@ import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(
-    plugin = "pretty", 
-    features = "src/test/resources/ohtu", 
-    snippets = SnippetType.CAMELCASE 
-)
+@CucumberOptions(plugin = "pretty", features = "src/test/resources/vinkki", snippets = SnippetType.CAMELCASE)
 
 public class RunCucumberTest {
     @ClassRule

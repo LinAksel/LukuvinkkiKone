@@ -14,8 +14,7 @@ public class AuthenticationService {
 
     public boolean add(String title, String link) {
         for (Vinkki v : vinkkiDao.listAll()) {
-            if (v.getTitle().equals(title)
-                    && v.getLink().equals(link)) {
+            if (v.getTitle().equals(title) && v.getLink().equals(link)) {
                 return true;
             }
         }
@@ -24,20 +23,21 @@ public class AuthenticationService {
     }
 
     public CreationStatus createNew(String title, String link) {
-        CreationStatus status = new CreationStatus();        
-        
+        CreationStatus status = new CreationStatus();
+
         if (vinkkiDao.findByTitle(title) != null) {
-            status.addError("Teokselle on jo luotu vinkki.");
+            status.addError("Teokselle on jo luotu vinkki!");
         }
 
-        if (title.length()<3 ) {
-            status.addError("Nimikkeen pitää olla vähintään kolme merkkiä pitkä.");
+        if (title.length() < 3) {
+            status.addError("Nimikkeen pitää olla vähintään kolme merkkiä pitkä!");
         }
 
         if (status.isOk()) {
+            status.addNote("Lisääminen onnistui!");
             vinkkiDao.add(new Vinkki(title, link));
         }
-        
+
         return status;
     }
 
