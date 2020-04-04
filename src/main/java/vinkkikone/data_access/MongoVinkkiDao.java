@@ -23,6 +23,15 @@ public class MongoVinkkiDao implements VinkkiDao {
     }
 
     public void add(Vinkki vinkki) {
+        MongoClient mongoClient = MongoClients.create(url);
+        MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+        MongoCollection<Document> haetut = database.getCollection("vinkit");
+        
+        Document document = new Document("title", vinkki.getTitle())
+                .append("link", vinkki.getLink()); //.append("kategoria", vinkki.getKategoria())
+        haetut.insertOne(document);
+        
+        mongoClient.close();
 
     }
 
@@ -36,38 +45,60 @@ public class MongoVinkkiDao implements VinkkiDao {
         Block<Document> saveBlock = new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                palautettava.add(new Vinkki(document.toJson()));
+                palautettava.add(jsonToVinkki(document.toJson()));
             }
         };
         haetut.find().forEach(saveBlock);
         
         mongoClient.close();
-//        for(Vinkki vinkki : palautettava) {
-//            System.out.println(vinkki);
-//        }
 
         return palautettava;
     }
 
     public Vinkki findByTitle(String title) {
-        return null;
-    }
-
-    public void testi() {
-
         MongoClient mongoClient = MongoClients.create(url);
         MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
         MongoCollection<Document> haetut = database.getCollection("vinkit");
-
-        Block<Document> printBlock = new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                System.out.println(document);
-                System.out.println("seuraava");
-            }
-        };
-        haetut.find().forEach(printBlock);
+        
+        
         mongoClient.close();
-
+        return null;
     }
+
+//    public void testi() {
+//
+//        MongoClient mongoClient = MongoClients.create(url);
+//        MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+//        MongoCollection<Document> haetut = database.getCollection("vinkit");
+//
+//        Block<Document> printBlock = new Block<Document>() {
+//            @Override
+//            public void apply(final Document document) {
+//                System.out.println(document);
+//                System.out.println("seuraava");
+//            }
+//        };
+//        haetut.find().forEach(printBlock);
+//        mongoClient.close();
+//
+//    }
+    
+    public Vinkki jsonToVinkki(String jsoni) {
+        String[] patkat = jsoni.split(", ");
+        return new Vinkki(patkat[1].substring(10, patkat[1].length() - 1), patkat[2].substring(9, patkat[2].length() - 2));
+//        this.mongoId = patkat[0].substring(18, patkat[0].length() - 2);
+//        this.title = patkat[1].substring(10, patkat[1].length() - 1);
+//        this.link = patkat[2].substring(9, patkat[2].length() - 2);
+    }
+    
+    // https://mongodb.github.io/mongo-java-driver/4.0/driver/tutorials/perform-read-operations/
+//    tällä muokattuna etsitään sitten tägit:
+//    collection.find(
+//    new Document("stars", new Document("$gte", 2)
+//          .append("$lt", 5))
+//          .append("categories", "Bakery")).forEach(printBlock);
+    
+    //sama toisin kirjoitettuna:
+    //collection.find(and(gte("stars", 2), lt("stars", 5), eq("categories", "Bakery")))
+    //        .forEach(printBlock);
 }
