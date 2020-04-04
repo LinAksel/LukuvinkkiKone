@@ -13,7 +13,7 @@ task( browse, dependsOn: jar, type: JavaExec ) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task stage(dependsOn: ['clean', 'installApp'])
+task stage(dependsOn: ['clean', 'installDist'])
 
 gradle.taskGraph.whenReady {
   taskGraph ->
