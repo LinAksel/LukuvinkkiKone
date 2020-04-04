@@ -13,10 +13,11 @@ task( browse, dependsOn: jar, type: JavaExec ) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task stage(dependsOn: ['clean', 'installApp'])
 
 gradle.taskGraph.whenReady {
   taskGraph ->
-    if (taskGraph.hasTask(build)) {
+    if (taskGraph.hasTask(stage)) {
       test.enabled = false
     }
 }
@@ -29,6 +30,7 @@ project.ext {
 }
 
 dependencies {
+
     compile 'com.google.guava:guava:20.0'
     testCompile 'io.cucumber:cucumber-java:' + cucumberVersion
     testCompile 'io.cucumber:cucumber-junit:' + cucumberVersion
