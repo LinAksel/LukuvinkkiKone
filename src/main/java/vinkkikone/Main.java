@@ -28,7 +28,7 @@ public class Main {
 //        vd.add(lisattava);
 //        System.out.println(vd.listAll());
 //        System.out.println(vd.findByTitle("testititle"));
-        
+
         port(findOutPort());
 
         // index
@@ -84,7 +84,12 @@ public class Main {
 
     public static AuthenticationService authenticationService() {
         if (dao == null) {
-            dao = new FileVinkkiDao("vinkit.txt");
+            //dao = new FileVinkkiDao("vinkit.txt");
+            if (System.getenv("MONGODB_URI") == null) {
+                dao = new MongoVinkkiDao(mongoUrl());
+            } else {
+                dao = new MongoVinkkiDao();
+            }
         }
         if (authService == null) {
             authService = new AuthenticationService(dao);
@@ -107,9 +112,8 @@ public class Main {
     }
 
     static String mongoUrl() {
-        
+
         // FIXME paikallisen config tiedoston lukija kehityksen tarpeisiin, voi poistaa heroku-versiosta
-        
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream("mongo.config"));

@@ -67,7 +67,7 @@ public class MongoVinkkiDao implements VinkkiDao {
         MongoCollection<Document> haetut = database.getCollection("vinkit");
         
         
-        Vinkki palautettava = jsonToVinkki(haetut.find(eq("title", title)).first().toJson());
+        Vinkki palautettava = jsonToVinkki(haetut.find(eq("title", title)).first().toJson()); //otetaan eka, pitäisi olla uniikki title
         
         mongoClient.close();
         return palautettava;
