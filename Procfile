@@ -1,1 +1,1 @@
-web: java -jar build/libs/LukuvinkkiKone.jar 
+web: build/install/LukuvinkkiKone/bin/LukuvinkkiKone 
