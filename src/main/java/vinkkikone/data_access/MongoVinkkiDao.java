@@ -5,6 +5,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+ import static com.mongodb.client.model.Filters.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -12,7 +14,7 @@ import vinkkikone.domain.Vinkki;
 
 /**
  *
- * @author karpo
+ * @author Samuli Nikkilä
  */
 public class MongoVinkkiDao implements VinkkiDao {
 
@@ -20,6 +22,11 @@ public class MongoVinkkiDao implements VinkkiDao {
 
     public MongoVinkkiDao(String url) {
         this.url = url;
+    }
+    
+    // Valmiiksi tehtynä parametritön konstruktori joka ottaa herokussa (jo siellä olevan) env arvon
+    public MongoVinkkiDao() {
+        this.url = System.getenv("MONGODB_URI");
     }
 
     public void add(Vinkki vinkki) {
@@ -49,7 +56,6 @@ public class MongoVinkkiDao implements VinkkiDao {
             }
         };
         haetut.find().forEach(saveBlock);
-        
         mongoClient.close();
 
         return palautettava;
@@ -61,34 +67,19 @@ public class MongoVinkkiDao implements VinkkiDao {
         MongoCollection<Document> haetut = database.getCollection("vinkit");
         
         
+        Vinkki palautettava = jsonToVinkki(haetut.find(eq("title", title)).first().toJson());
+        
         mongoClient.close();
-        return null;
+        return palautettava;
     }
 
-//    public void testi() {
-//
-//        MongoClient mongoClient = MongoClients.create(url);
-//        MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
-//        MongoCollection<Document> haetut = database.getCollection("vinkit");
-//
-//        Block<Document> printBlock = new Block<Document>() {
-//            @Override
-//            public void apply(final Document document) {
-//                System.out.println(document);
-//                System.out.println("seuraava");
-//            }
-//        };
-//        haetut.find().forEach(printBlock);
-//        mongoClient.close();
-//
-//    }
-    
     public Vinkki jsonToVinkki(String jsoni) {
         String[] patkat = jsoni.split(", ");
         return new Vinkki(patkat[1].substring(10, patkat[1].length() - 1), patkat[2].substring(9, patkat[2].length() - 2));
+        
+        // Tässä on mongon sisäinen id tälle vinkille:
 //        this.mongoId = patkat[0].substring(18, patkat[0].length() - 2);
-//        this.title = patkat[1].substring(10, patkat[1].length() - 1);
-//        this.link = patkat[2].substring(9, patkat[2].length() - 2);
+
     }
     
     // https://mongodb.github.io/mongo-java-driver/4.0/driver/tutorials/perform-read-operations/

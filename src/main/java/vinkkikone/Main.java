@@ -12,6 +12,7 @@ import vinkkikone.util.CreationStatus;
 import spark.ModelAndView;
 import static spark.Spark.*;
 import spark.template.velocity.VelocityTemplateEngine;
+import vinkkikone.data_access.MongoVinkkiDao;
 import vinkkikone.data_access.VinkkiDao;
 
 public class Main {
@@ -21,6 +22,13 @@ public class Main {
     static AuthenticationService authService;
 
     public static void main(String[] args) {
+        //mongo testaukseen
+//        VinkkiDao vd = new MongoVinkkiDao(mongoUrl());
+//        Vinkki lisattava = new Vinkki("lisataan", "linklisataan");
+//        vd.add(lisattava);
+//        System.out.println(vd.listAll());
+//        System.out.println(vd.findByTitle("testititle"));
+        
         port(findOutPort());
 
         // index

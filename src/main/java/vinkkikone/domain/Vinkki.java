@@ -12,13 +12,6 @@ public class Vinkki {
         this.link = link;
     }
 
-//    public Vinkki(String jsoni) {
-//        String[] patkat = jsoni.split(", ");
-//        this.mongoId = patkat[0].substring(18, patkat[0].length() - 2);
-//        this.title = patkat[1].substring(10, patkat[1].length() - 1);
-//        this.link = patkat[2].substring(9, patkat[2].length() - 2);
-//    }
-
     public Vinkki() {
     }
 
@@ -38,6 +31,12 @@ public class Vinkki {
         this.title = title;
     }
 
+    public String toString() {
+        return this.title + ", " + this.link;
+    }
+    
+    // FIXME jätin nämä tähän jos tarvitaan jotain näistä vielä
+    
 //    public String getMongoId() {
 //        return this.mongoId;
 //    }
@@ -46,7 +45,13 @@ public class Vinkki {
 //        this.mongoId = mongoId;
 //    }
 
-    public String toString() {
-        return this.title + ", " + this.link;
-    }
+
+//    public Vinkki(String jsoni) {
+//        String[] patkat = jsoni.split(", ");
+//        this.mongoId = patkat[0].substring(18, patkat[0].length() - 2);
+//        this.title = patkat[1].substring(10, patkat[1].length() - 1);
+//        this.link = patkat[2].substring(9, patkat[2].length() - 2);
+//    }
+
+
 }
