@@ -13,6 +13,14 @@ task( browse, dependsOn: jar, type: JavaExec ) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+
+gradle.taskGraph.whenReady {
+  taskGraph ->
+    if (taskGraph.hasTask(build)) {
+      test.enabled = false
+    }
+}
+
 project.ext {
     cucumberVersion = '4.7.4'
     junitVersion = '4.12'
