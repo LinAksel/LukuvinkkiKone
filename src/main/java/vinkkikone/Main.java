@@ -1,6 +1,9 @@
 package vinkkikone;
 
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import vinkkikone.domain.*;
 import vinkkikone.authentication.AuthenticationService;
 import vinkkikone.data_access.FileVinkkiDao;
 import vinkkikone.util.CreationStatus;
@@ -33,23 +36,17 @@ public class Main {
 
         // list
         get("/list", (request, response) -> {
-            HashMap<String, String> model = new HashMap<>();
+            HashMap<String, Object> model = new HashMap<>();
+            List<Vinkki> lista = authenticationService().getList();
+            model.put("list", lista);
             model.put("template", "templates/list.html");
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
         // post("/list", (request, response) -> {
         // HashMap<String, String> model = new HashMap<>();
-        // String title = request.queryParams("title");
-        // String link = request.queryParams("link");
-        //
-        // if (!authenticationService().add(title, link)) {
-        // model.put("error", "Jotain meni pieleen. :(");
-        // model.put("template", "templates/addnew.html");
-        // return new ModelAndView(model, LAYOUT);
-        // }
-        //
-        // response.redirect("/");
+        // String lista = authenticationService().getList();
+        // model.put("note", lista);
         // return new ModelAndView(model, LAYOUT);
         // }, new VelocityTemplateEngine());
 

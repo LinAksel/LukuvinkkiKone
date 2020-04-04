@@ -1,12 +1,15 @@
 package vinkkikone.authentication;
 
 import vinkkikone.domain.Vinkki;
+import java.util.List;
+import java.util.ArrayList;
 import vinkkikone.util.CreationStatus;
 import vinkkikone.data_access.VinkkiDao;
 
 public class AuthenticationService {
 
     private VinkkiDao vinkkiDao;
+    private String lista = "ei";
 
     public AuthenticationService(VinkkiDao vD) {
         this.vinkkiDao = vD;
@@ -20,6 +23,10 @@ public class AuthenticationService {
         }
 
         return false;
+    }
+
+    public List<Vinkki> getList() {
+        return vinkkiDao.listAll();
     }
 
     public CreationStatus createNew(String title, String link) {
