@@ -19,6 +19,12 @@ import vinkkikone.domain.Vinkki;
  * @author karpo
  */
 public class MongoVinkkiDao implements VinkkiDao {
+    
+    private String url;
+    
+    public MongoVinkkiDao(String url) {
+        this.url = url;
+    }
 
     public void add(Vinkki vinkki) {
 
@@ -34,7 +40,7 @@ public class MongoVinkkiDao implements VinkkiDao {
 
     public void testi() {
 
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://lukuvinkkikone:ayvvIMF9K74gjoHV@einekluster-y4sht.mongodb.net/");
+        MongoClient mongoClient = MongoClients.create(url);
         //System.out.println("yhteys muodostettu");
         MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
         //System.out.println("vinkit haettu");
