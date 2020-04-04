@@ -1,9 +1,11 @@
 package vinkkikone;
 
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import vinkkikone.domain.*;
+import java.util.Properties;
 import vinkkikone.authentication.AuthenticationService;
 import vinkkikone.data_access.FileVinkkiDao;
 import vinkkikone.util.CreationStatus;
@@ -49,7 +51,6 @@ public class Main {
         // model.put("note", lista);
         // return new ModelAndView(model, LAYOUT);
         // }, new VelocityTemplateEngine());
-
         // addnew
         get("/addnew", (request, response) -> {
             HashMap<String, String> model = new HashMap<>();
@@ -103,4 +104,22 @@ public class Main {
     static void setEnvPort(String port) {
         portFromEnv = port;
     }
+
+    static String mongoUrl() {
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream("mongo.config"));
+
+            String mongoUser = properties.getProperty("user");
+            String mongoPW = properties.getProperty("password");
+            String mongoURL = properties.getProperty("url");
+            System.out.println("palautetaan url: mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/");
+            return "mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
+
+        } catch (Exception e) {
+            System.out.println("Error reading config file:" + e.getMessage());
+            return "";
+        }
+    }
+
 }
