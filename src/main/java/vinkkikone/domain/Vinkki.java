@@ -11,7 +11,7 @@ public class Vinkki {
         this.title = title;
         this.link = link;
     }
-    
+
     public Vinkki(String jsoni) {
         String[] patkat = jsoni.split(", ");
         this.mongoId = patkat[0].substring(18, patkat[0].length() - 2);
@@ -37,15 +37,15 @@ public class Vinkki {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public String getMongoId() {
         return this.mongoId;
     }
-    
+
     public void setMongoId(String mongoId) {
         this.mongoId = mongoId;
     }
-    
+
     public String toString() {
         return this.title + ", " + this.link;
     }
