@@ -1,18 +1,9 @@
 <h1>Vinkit</h1>
 
-#if( $note )
-<div id="note" style="color:green">
-    <p><em>$note</em></p>
-</div>
-#end
-
+<!--Tässä tulostuu jokainen vinkki-->
 #foreach($vinkki in $list)
 <div class="view">
     <p><em>$vinkki.title</em></p>
     <p><em>$vinkki.link</em></p>
 </div>
 #end
-
-<div id="list-wrapper">
-    <!--lista vinkit.txt -tiedostosta-->
-</div>

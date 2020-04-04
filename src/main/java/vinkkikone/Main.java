@@ -45,13 +45,6 @@ public class Main {
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
-        // post("/list", (request, response) -> {
-        // HashMap<String, String> model = new HashMap<>();
-        // String lista = authenticationService().getList();
-        // model.put("note", lista);
-        // return new ModelAndView(model, LAYOUT);
-        // }, new VelocityTemplateEngine());
-        // addnew
         get("/addnew", (request, response) -> {
             HashMap<String, String> model = new HashMap<>();
             model.put("template", "templates/addnew.html");

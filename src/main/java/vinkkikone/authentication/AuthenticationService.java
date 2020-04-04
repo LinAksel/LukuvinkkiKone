@@ -9,7 +9,6 @@ import vinkkikone.data_access.VinkkiDao;
 public class AuthenticationService {
 
     private VinkkiDao vinkkiDao;
-    private String lista = "ei";
 
     public AuthenticationService(VinkkiDao vD) {
         this.vinkkiDao = vD;
@@ -25,6 +24,7 @@ public class AuthenticationService {
         return false;
     }
 
+    // Tää metodi kaipaa vielä statuserror-käsittelyä createNew-tyylisesti!
     public List<Vinkki> getList() {
         return vinkkiDao.listAll();
     }
