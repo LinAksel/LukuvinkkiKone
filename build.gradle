@@ -41,6 +41,13 @@ test {
     systemProperties System.getProperties()
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'vinkkikone.Main'
+    }
+}
+
+
 // Define the main class for the application
 mainClassName = 'vinkkikone.Main'
 

@@ -1,3 +1,4 @@
 build/
 vinkit.txt
 gradle.properties
+/.gradle/
