@@ -99,6 +99,9 @@ public class Main {
     }
 
     static String mongoUrl() {
+        
+        // FIXME paikallisen config tiedoston lukija kehityksen tarpeisiin, voi poistaa heroku-versiosta
+        
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream("mongo.config"));
@@ -106,7 +109,7 @@ public class Main {
             String mongoUser = properties.getProperty("user");
             String mongoPW = properties.getProperty("password");
             String mongoURL = properties.getProperty("url");
-            System.out.println("palautetaan url: mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/");
+            //System.out.println("palautetaan url: mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/");
             return "mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
 
         } catch (Exception e) {
