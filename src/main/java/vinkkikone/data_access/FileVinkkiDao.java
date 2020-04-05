@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.util.List;
 import vinkkikone.domain.Vinkki;
 import java.util.*;
+import org.bson.types.ObjectId;
 
 public class FileVinkkiDao implements VinkkiDao {
     private String file;
@@ -54,6 +55,20 @@ public class FileVinkkiDao implements VinkkiDao {
             author.close();
         } catch(Exception e) {
         }
+    }
+    
+    @Override
+    public void delete(Vinkki vinkki) {
+        vinkit.remove(vinkki);
+    }
+    
+    @Override
+    public void update(Vinkki vinkki) {
+    }
+    
+    @Override
+    public Vinkki findById(ObjectId id) {
+        return null;
     }
     
 }

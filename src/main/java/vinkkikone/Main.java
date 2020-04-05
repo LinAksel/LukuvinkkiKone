@@ -22,13 +22,6 @@ public class Main {
     static AuthenticationService authService;
 
     public static void main(String[] args) {
-        //mongo testaukseen
-//        VinkkiDao vd = new MongoVinkkiDao(mongoUrl());
-//        Vinkki lisattava = new Vinkki("lisataan", "linklisataan");
-//        vd.add(lisattava);
-//        System.out.println(vd.listAll());
-//        System.out.println(vd.findByTitle("testititle"));
-
         port(findOutPort());
 
         // index
@@ -85,10 +78,11 @@ public class Main {
     public static AuthenticationService authenticationService() {
         if (dao == null) {
             //dao = new FileVinkkiDao("vinkit.txt");
-            if (System.getenv("MONGODB_URI") == null) {
+            String url = System.getenv("MONGODB_URI");
+            if (url == null) {
                 dao = new MongoVinkkiDao(mongoUrl());
             } else {
-                dao = new MongoVinkkiDao();
+                dao = new MongoVinkkiDao(url);
             }
         }
         if (authService == null) {
