@@ -1,13 +1,21 @@
 package vinkkikone.domain;
 
+import org.bson.types.ObjectId;
+
 public class Vinkki {
 
     private String title;
     private String link;
-    //private String mongoId;
-    private Integer id;
+    private ObjectId mongoId;
+    //private Integer id;
 
     public Vinkki(String title, String link) {
+        this.title = title;
+        this.link = link;
+    }
+    
+    public Vinkki(ObjectId mongoId, String title, String link) {
+        this.mongoId = mongoId;
         this.title = title;
         this.link = link;
     }
@@ -37,13 +45,13 @@ public class Vinkki {
     
     // FIXME jätin nämä tähän jos tarvitaan jotain näistä vielä
     
-//    public String getMongoId() {
-//        return this.mongoId;
-//    }
-//
-//    public void setMongoId(String mongoId) {
-//        this.mongoId = mongoId;
-//    }
+    public ObjectId getMongoId() {
+        return this.mongoId;
+    }
+
+    public void setMongoId(ObjectId mongoId) {
+        this.mongoId = mongoId;
+    }
 
 
 //    public Vinkki(String jsoni) {
