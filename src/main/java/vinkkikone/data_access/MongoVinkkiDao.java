@@ -81,7 +81,7 @@ public class MongoVinkkiDao implements VinkkiDao {
 
     //tein paremmin, pidetään tämä vielä kunnes DB valmis
     public Vinkki jsonToVinkki(String jsoni) {
-        System.out.println(jsoni);
+        //System.out.println(jsoni);
         String[] patkat = jsoni.split(", ");
         return new Vinkki(patkat[1].substring(10, patkat[1].length() - 1), patkat[2].substring(9, patkat[2].length() - 2));
     }
