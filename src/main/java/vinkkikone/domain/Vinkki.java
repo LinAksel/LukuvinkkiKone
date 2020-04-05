@@ -7,7 +7,7 @@ public class Vinkki {
     private String title;
     private String link;
     private ObjectId mongoId;
-
+ 
     public Vinkki(String title, String link) {
         this.title = title;
         this.link = link;
