@@ -4,3 +4,5 @@ gradle.properties
 mongo.config
 .gradle/
 bin/
+.nb-gradle/
+.settings/
