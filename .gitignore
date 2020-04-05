@@ -1,6 +1,6 @@
 build/
 vinkit.txt
 gradle.properties
-/.gradle/
 mongo.config
 .gradle/
+bin/
