@@ -45,8 +45,18 @@ public class Stepdefs {
 
     }
 
-   
+   @Given("app is started")
+   public void mainPageIsStarted(){
+        driver.get(baseUrl);
+   }
 
+   @Then ("main page opens")
+   public void mainPageIsShown(){
+        pageHasContent("Lukuvinkkikone");
+        pageHasContent("Listaa vinkit");
+        pageHasContent("Lisää uusi vinkki!");
+
+   }
 
     @After
     public void tearDown() {
