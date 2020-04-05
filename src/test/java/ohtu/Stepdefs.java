@@ -31,10 +31,22 @@ public class Stepdefs {
         pageHasContent(content);
     }
 
-    @Given(" list is selected")
+    @Given("list is selected")
     public void listIsSelected() {
-        // Lisää testi
+        driver.get(baseUrl);
+        WebElement element = driver.findElement(By.linkText("Listaa vinkit"));
+        element.click();
     }
+
+    @Then ("list page opens")
+    public void listIsShown(){
+        pageHasContent("Seitsemän veljestä");
+        pageHasContent("Paroni von Münchhausen");
+
+    }
+
+   
+
 
     @After
     public void tearDown() {
