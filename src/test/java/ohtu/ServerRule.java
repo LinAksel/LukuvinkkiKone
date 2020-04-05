@@ -19,6 +19,7 @@ public class ServerRule extends ExternalResource {
         Spark.port(port);
         VinkkiDao dao = new VinkkiDaoForTests();
         dao.add(new Vinkki("Paroni von Münchhausen", "http://www.gutenberg.org/ebooks/48623"));
+        dao.add(new Vinkki("Seitsemän veljestä", "https://fi.wikipedia.org/wiki/Seitsem%C3%A4n_veljest%C3%A4"));
         Main.setDao(dao);
         Main.main(null);
     }
