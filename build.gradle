@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'build-dashboard'
 apply plugin: 'application'
+apply plugin: 'jacoco' 
 
 // In this section you declare where to find the dependencies of your project
 repositories {

@@ -14,15 +14,7 @@ public class AuthenticationService {
         this.vinkkiDao = vD;
     }
 
-    public boolean add(String title, String link) {
-        for (Vinkki v : vinkkiDao.listAll()) {
-            if (v.getTitle().equals(title) && v.getLink().equals(link)) {
-                return true;
-            }
-        }
 
-        return false;
-    }
 
     // Tää metodi kaipaa vielä statuserror-käsittelyä createNew-tyylisesti!
     public List<Vinkki> getList() {

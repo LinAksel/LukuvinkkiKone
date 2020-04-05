@@ -3,6 +3,9 @@ package ohtu;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bson.types.ObjectId;
+
 import vinkkikone.domain.Vinkki;
 import vinkkikone.data_access.VinkkiDao;
 
@@ -40,5 +43,23 @@ public class VinkkiDaoForTests implements VinkkiDao {
 
     public List<Vinkki> getVinkit() {
         return vinkit;
+    }
+
+    @Override
+    public Vinkki findById(ObjectId id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void update(Vinkki vinkki) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void delete(Vinkki vinkki) {
+        // TODO Auto-generated method stub
+
     }
 }
