@@ -3,6 +3,7 @@ package vinkkikone.data_access;
 import vinkkikone.domain.Vinkki;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 public class InMemoryVinkkiDao implements VinkkiDao {
 
@@ -39,5 +40,17 @@ public class InMemoryVinkkiDao implements VinkkiDao {
 
     public List<Vinkki> getAll() {
         return vinkit;
+    }
+    
+    public Vinkki findById(ObjectId id) {
+        return null;
+    }
+    
+    public void update(Vinkki vinkki) {
+        return;
+    }
+    
+    public void delete(Vinkki vinkki) {
+        vinkit.remove(vinkki);
     }
 }
