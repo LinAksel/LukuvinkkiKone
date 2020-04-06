@@ -77,13 +77,13 @@ public class Main {
 
     public static AuthenticationService authenticationService() {
         if (dao == null) {
-            //dao = new FileVinkkiDao("vinkit.txt");
-            String url = System.getenv("MONGODB_URI");
-            if (url == null) {
-                dao = new MongoVinkkiDao(mongoUrl());
-            } else {
-                dao = new MongoVinkkiDao(url);
-            }
+            dao = new FileVinkkiDao("vinkit.txt");
+//            String url = System.getenv("MONGODB_URI");
+//            if (url == null) {
+//                dao = new MongoVinkkiDao(mongoUrl());
+//            } else {
+//                dao = new MongoVinkkiDao(url);
+//            }
         }
         if (authService == null) {
             authService = new AuthenticationService(dao);
