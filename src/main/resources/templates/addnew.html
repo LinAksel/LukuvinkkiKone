@@ -15,14 +15,16 @@
 
 <div class="form">
     <form method="POST" action="/addnew" id="vform">
-        <label for="ftitle">Vinkin nimi:</label><br>
-        <input type="text" name="title" id="ftitle" size="100" /><br>
-        <label for="flink">Linkki:</label><br>
-        <input type="text" name="link" id="flink" size="100" /><br>
-        <label for="fdescription">Kuvaus:</label><br>
-        <textarea rows="5" cols="100" name="description" id="fdescription" form="vform"></textarea><br>
-        <br><br>
+        <label for="ftitle">Vinkin nimi:</label><br><br>
+        <input type="text" name="title" id="ftitle" size="100" /><br><br>
+        <label for="flink">Linkki:</label><br><br>
+        <input type="text" name="link" id="flink" size="100" placeholder="Muodossa https://... tai www..."/><br><br>
+        <label for="fdescription">Kuvaus:</label><br><br>
+        <textarea rows="5" cols="100" name="description" id="fdescription" form="vform"></textarea><br><br>
+        <label for="ftags">Tägit:</label><br><br>
+        <input type="text" name="tags" id="ftags" size="100" placeholder="Erota tägit pilkulla"/><br><br>
         <input name="add" type="submit" value="Lisää" /><br>
+        <br><br>
     </form>
 </div>
 <p><a href="/">Peruuta</a></p>

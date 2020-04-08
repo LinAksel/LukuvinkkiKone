@@ -3,10 +3,11 @@
 #foreach($vinkki in $list)
 <button type="button" class="collapsible">$vinkki.title</button>
 <div class="content" id="listwrapper">
-    <div class="listitem1"><a href=$vinkki.link>$vinkki.link</a></div><br>
-    <div class="listitem2">Kuvaus: $vinkki.description</div>
-    <div class="listitem3">Tägit: $vinkki.tags</div>
-    <div class="listitem4">Luettu: $vinkki.readDate</div>
+    <div class="listitemLink"><a href=$vinkki.link>$vinkki.link</a></div><br>
+    <div class="listitemDescription">Kuvaus: $vinkki.description</div>
+    <div class="listitemTags">Tägit: $vinkki.tags</div>
+    <div class="listitemRead">Luettu: $vinkki.readDate</div>
+    <!--<div class="listitemDate">Lisätty: $vinkki.date</div>-->
 </div>
 #end
 <!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->

@@ -24,7 +24,7 @@ public class AuthenticationService {
             description = "Kuvausta ei ole annettu ";
         }
         if (tags == null) {
-            tags = "Tägejä ei ole annettu ";
+            tags = "Tägejä ei ole annettu.";
         }
         if (readDate == null) {
             readDate = "Ei luettu";
@@ -48,6 +48,11 @@ public class AuthenticationService {
 
         if (!link.contains("www.") && !link.contains("https://")) {
             status.addError("Anna linkki oikeassa muodossa! https://... tai www...");
+            return status;
+        }
+
+        if (!tags.contains("Tägejä ei ole annettu.") && (tags.contains(" ") && (!tags.contains(",")))) {
+            status.addError("Tägit pitää erottaa pilkulla! Käytä vain yksisanaisia tägejä.");
             return status;
         }
 
