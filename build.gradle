@@ -16,10 +16,16 @@ task( browse, dependsOn: jar, type: JavaExec ) {
 task stage(dependsOn: ['clean', 'installDist'])
 
 gradle.taskGraph.whenReady {
-  taskGraph ->
+    taskGraph ->
     if (taskGraph.hasTask(stage)) {
-      test.enabled = false
+        test.enabled = false
     }
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 project.ext {
@@ -72,9 +78,9 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: ['vinkkikone/data_access/**'])
-        }))
+                    fileTree(dir: it,
+                        exclude: ['vinkkikone/data_access/**'])
+                }))
     }
 }
 

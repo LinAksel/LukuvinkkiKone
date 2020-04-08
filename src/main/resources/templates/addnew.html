@@ -14,13 +14,16 @@
 
 
 <div class="form">
-    <form method="POST" action="/addnew">
+    <form method="POST" action="/addnew" id="vform">
         <label for="ftitle">Vinkin nimi:</label><br>
         <input type="text" name="title" id="ftitle" size="100" /><br>
         <label for="flink">Linkki:</label><br>
         <input type="text" name="link" id="flink" size="100" /><br>
+        <label for="fdescription">Kuvaus:</label><br>
+        <textarea rows="5" cols="100" name="description" id="fdescription" form="vform"></textarea><br>
         <br><br>
         <input name="add" type="submit" value="Lisää" /><br>
     </form>
 </div>
 <p><a href="/">Peruuta</a></p>
+

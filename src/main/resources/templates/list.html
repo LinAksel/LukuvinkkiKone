@@ -1,9 +1,29 @@
 <h1>Vinkit</h1>
-
 <!--Tässä tulostuu jokainen vinkki-->
 #foreach($vinkki in $list)
-<div class="view">
-    <p><em>$vinkki.title</em></p>
-    <p><em>$vinkki.link</em></p>
+<button type="button" class="collapsible">$vinkki.title</button>
+<div class="content" id="listwrapper">
+    <div class="listitem1"><a href=$vinkki.link>$vinkki.link</a></div><br>
+    <div class="listitem2">Kuvaus: $vinkki.description</div>
+    <div class="listitem3">Tägit: $vinkki.tags</div>
+    <div class="listitem4">Luettu: $vinkki.readDate</div>
 </div>
 #end
+<!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+</script>
+

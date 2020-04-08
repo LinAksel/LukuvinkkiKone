@@ -12,7 +12,7 @@ import vinkkikone.util.CreationStatus;
 import spark.ModelAndView;
 import static spark.Spark.*;
 import spark.template.velocity.VelocityTemplateEngine;
-import vinkkikone.data_access.MongoVinkkiDao;
+//import vinkkikone.data_access.MongoVinkkiDao;
 import vinkkikone.data_access.VinkkiDao;
 
 public class Main {
@@ -56,8 +56,11 @@ public class Main {
             HashMap<String, String> model = new HashMap<>();
             String title = request.queryParams("title");
             String link = request.queryParams("link");
+            String description = request.queryParams("description");
+            String tags = request.queryParams("tags");
+            String readDate = request.queryParams("readDate");
 
-            CreationStatus status = authenticationService().createNew(title, link);
+            CreationStatus status = authenticationService().createNew(title, link, description, tags, readDate);
 
             if (!status.isOk()) {
                 model.put("error", String.join(",  ", status.errors()));
