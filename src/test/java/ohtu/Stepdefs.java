@@ -21,9 +21,9 @@ public class Stepdefs {
         element.click();
     }
 
-    @When("title {string} and link {string} are given")
-    public void correctTitleAndLinkAreGiven(String title, String link) {
-        lisaa(title, link);
+    @When("title {string}, link {string}, description {string} and tags {string} are given")
+    public void correctTitleAndLinkAreGiven(String title, String link, String description, String tags) {
+        lisaa(title, link,description, tags);
     }
 
     @Then("system will respond with {string}")
@@ -69,11 +69,15 @@ public class Stepdefs {
         assertTrue(driver.getPageSource().contains(content));
     }
 
-    private void lisaa(String title, String link) {
+    private void lisaa(String title, String link, String description, String tags) {
         WebElement element = driver.findElement(By.name("title"));
         element.sendKeys(title);
         element = driver.findElement(By.name("link"));
         element.sendKeys(link);
+        element = driver.findElement(By.name("description"));
+        element.sendKeys(description);
+        element = driver.findElement(By.name("tags"));
+        element.sendKeys(tags);
         element = driver.findElement(By.name("add"));
         element.submit();
     }

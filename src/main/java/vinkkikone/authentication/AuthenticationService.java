@@ -21,15 +21,25 @@ public class AuthenticationService {
 
     public CreationStatus createNew(String title, String link, String description, String tags, String readDate) {
         if (description == null || description.isEmpty()) {
-            description = "Kuvausta ei ole annettu ";
+            description = "Kuvausta ei ole annettu.";
         }
-        if (tags == null) {
+        if (tags == null || tags.isEmpty()) {
             tags = "Tägejä ei ole annettu.";
         }
         if (readDate == null) {
             readDate = "Ei luettu";
         }
         CreationStatus status = new CreationStatus();
+
+        if (description.equals("Kuvausta ei ole annettu.")){
+            status.addError("Kuvausta ei ole annettu.");
+            return status;
+        }
+
+        if (tags.equals("Tägejä ei ole annettu.")){
+            status.addError("Tägejä ei ole annettu.");
+            return status;
+        }
 
         if (vinkkiDao.findByTitle(title) != null) {
             status.addError("Teokselle on jo luotu vinkki!");

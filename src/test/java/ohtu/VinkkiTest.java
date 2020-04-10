@@ -56,6 +56,33 @@ public class VinkkiTest{
         assertEquals("Ronja ryövärintytär, www.helsinki.fi", vinkki.toString());
     }
 
+    @Test
+    public void setDescriptionSetsDescription(){
+        vinkki.setDescription("Kirjan avulla voit löytää sisäisen ryövärisi");
+
+        assertEquals("Kirjan avulla voit löytää sisäisen ryövärisi", vinkki.getDescription());
+
+    }
+    
+    //Tämä testi on nyt String muotoisille tageille. Oletettavasti muutetaan kun tagit muuttavat muotoaan
+    @Test
+    public void setTagsSetsTags(){
+        vinkki.setTags("testi, kokeilu, mitä, tapahtuu");
+
+        assertEquals("testi, kokeilu, mitä, tapahtuu", vinkki.getTags());
+
+    }
+//testi string muotoiselle päivämäärälle, muokattaneen?
+    @Test
+    public void setReadDateSetsReadDate(){
+        vinkki.setReadDate("1.3.2019");
+
+        assertEquals("1.3.2019",vinkki.getReadDate());
+
+    }
+
+
+
 
 }
 
