@@ -1,5 +1,8 @@
 package vinkkikone.domain;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 
 public class Vinkki {
@@ -7,21 +10,24 @@ public class Vinkki {
     private String title;
     private String link;
     private String description;
-    private String tags;
+    private List<String>tagsList; 
     private String readDate;
     private ObjectId mongoId;
 
-    //Vähin pakollinen tietomäärä, otsikko ja linkki
-    public Vinkki(String title, String link) {
-        this.title = title;
-        this.link = link;
-    }
-
-    public Vinkki(String title, String link, String description, String tags, String readDate) {
+    //tähän muutettava tagsList
+    public Vinkki(String title, String link, String description, List<String>tagsList, String readDate) {
         this.title = title;
         this.link = link;
         this.description = description;
-        this.tags = tags;
+        this.tagsList = tagsList;
+        this.readDate = readDate;
+    }
+
+    public Vinkki(String title, String link, String description, String tagsList, String readDate) {
+        this.title = title;
+        this.link = link;
+        this.description = description;
+        this.tagsList = Arrays.asList(tagsList.split(","));
         this.readDate = readDate;
     }
 
@@ -31,8 +37,7 @@ public class Vinkki {
         this.link = link;
     }
 
-    public Vinkki() {
-    }
+  
 
     public String getLink() {
         return link;
@@ -46,17 +51,18 @@ public class Vinkki {
         return description;
     }
 
-    public String getTags() {
-        return tags;
+    public List<String> getTags() {
+        return tagsList;
     }
 
     public String getReadDate() {
         return readDate;
     }
+    public void setTags(String tags){
 
-    public void setTags(String tags) {
-        this.tags = tags;
+        tagsList=Arrays.asList(tags.split(","));
     }
+
 
     public void setReadDate(String rDate) {
         this.readDate = rDate;

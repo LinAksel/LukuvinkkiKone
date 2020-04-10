@@ -20,7 +20,7 @@ public class Stepdefs {
         WebElement element = driver.findElement(By.linkText("Lisää uusi vinkki!"));
         element.click();
     }
-
+    
     @When("title {string}, link {string}, description {string} and tags {string} are given")
     public void correctTitleAndLinkAreGiven(String title, String link, String description, String tags) {
         lisaa(title, link,description, tags);

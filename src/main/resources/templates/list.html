@@ -5,9 +5,15 @@
 <div class="content" id="listwrapper">
     <div class="listitemLink"><a href=$vinkki.link>$vinkki.link</a></div><br>
     <div class="listitemDescription">Kuvaus: $vinkki.description</div>
-    <div class="listitemTags">Tägit: $vinkki.tags</div>
+    <div class="listitemTags">Tägit:  #foreach($tagi in $vinkki.tags)
+    <div class="chip">
+    $tagi
+    </div>
+     #end
+    </div>
     <div class="listitemRead">Luettu: $vinkki.readDate</div>
     <!--<div class="listitemDate">Lisätty: $vinkki.date</div>-->
+    <!--tänne tagi chippeinä, tee forri?-->
 </div>
 #end
 <!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->

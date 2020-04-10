@@ -11,7 +11,7 @@ public class InMemoryVinkkiDao implements VinkkiDao {
 
     public InMemoryVinkkiDao() {
         vinkit = new ArrayList<Vinkki>();
-        vinkit.add(new Vinkki("Paroni von Münchhausen", "http://www.gutenberg.org/ebooks/48623"));
+        vinkit.add(new Vinkki("Paroni von Münchhausen", "http://www.gutenberg.org/ebooks/48623", "Kommentti", "tagi,tagi,tagi", "Ei luettu"));
     }
 
     @Override
