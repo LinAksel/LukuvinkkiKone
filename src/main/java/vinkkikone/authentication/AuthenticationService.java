@@ -29,6 +29,9 @@ public class AuthenticationService {
         if (readDate == null) {
             readDate = "Ei luettu";
         }
+        if (link == null || link.isEmpty()) {
+            link= "Vinkillä pitää olla myös linkki!";
+        }
         CreationStatus status = new CreationStatus();
 
         if (description.equals("Kuvausta ei ole annettu.")){
@@ -51,7 +54,7 @@ public class AuthenticationService {
             return status;
         }
 
-        if (link == null) {
+        if (link.equals("Vinkillä pitää olla myös linkki!")) {
             status.addError("Vinkillä pitää olla myös linkki!");
             return status;
         }
@@ -62,7 +65,7 @@ public class AuthenticationService {
         }
 
         if (!tags.contains("Tägejä ei ole annettu.") && (tags.contains(" ") && (!tags.contains(",")))) {
-            status.addError("Tägit pitää erottaa pilkulla! Käytä vain yksisanaisia tägejä.");
+            status.addError("Anna tägejä enemmän kuin yksi. Tägit pitää erottaa pilkulla! Käytä vain yksisanaisia tägejä.");
             return status;
         }
 

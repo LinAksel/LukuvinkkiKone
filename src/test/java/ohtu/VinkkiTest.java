@@ -1,5 +1,9 @@
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +18,7 @@ public class VinkkiTest{
 
     @Before
     public void setup(){
-        vinkki=new Vinkki();
+        vinkki=new Vinkki("Ronja ryövärintytär", "www.kirjat.fi", "Kirja iloisista lapsista", "ronja, tyttö, iloinen", "testistring");
     }
 
     @Test
@@ -63,13 +67,14 @@ public class VinkkiTest{
         assertEquals("Kirjan avulla voit löytää sisäisen ryövärisi", vinkki.getDescription());
 
     }
-    
-    //Tämä testi on nyt String muotoisille tageille. Oletettavasti muutetaan kun tagit muuttavat muotoaan
+
+   
     @Test
     public void setTagsSetsTags(){
-        vinkki.setTags("testi, kokeilu, mitä, tapahtuu");
+        List<String>tags= new ArrayList<String>(Arrays.asList("testi", "kokeilu", "mitä", "tapahtuu"));
+        vinkki.setTags("testi,kokeilu,mitä,tapahtuu");
 
-        assertEquals("testi, kokeilu, mitä, tapahtuu", vinkki.getTags());
+        assertEquals(tags, vinkki.getTags());
 
     }
 //testi string muotoiselle päivämäärälle, muokattaneen?

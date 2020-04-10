@@ -14,7 +14,7 @@ public class Vinkki {
     private String readDate;
     private ObjectId mongoId;
 
-    //tähän muutettava tagsList
+    
     public Vinkki(String title, String link, String description, List<String>tagsList, String readDate) {
         this.title = title;
         this.link = link;
