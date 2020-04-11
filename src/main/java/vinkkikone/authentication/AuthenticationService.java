@@ -2,13 +2,13 @@ package vinkkikone.authentication;
 
 import vinkkikone.domain.Vinkki;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 import vinkkikone.util.CreationStatus;
 import vinkkikone.data_access.VinkkiDao;
 
 public class AuthenticationService {
 
-    private VinkkiDao vinkkiDao;
+    private final VinkkiDao vinkkiDao;
 
     public AuthenticationService(VinkkiDao vD) {
         this.vinkkiDao = vD;
@@ -19,27 +19,19 @@ public class AuthenticationService {
         return vinkkiDao.listAll();
     }
 
-    public CreationStatus createNew(String title, String link, String description, String tags, String readDate) {
-        if (description == null || description.isEmpty()) {
-            description = "Kuvausta ei ole annettu.";
-        }
-        if (tags == null || tags.isEmpty()) {
-            tags = "Tägejä ei ole annettu.";
-        }
-        if (readDate == null) {
-            readDate = "Ei luettu";
-        }
-        if (link == null || link.isEmpty()) {
-            link= "Vinkillä pitää olla myös linkki!";
-        }
+    public CreationStatus createNew(String title, String link, String description, String tags) {
+//        if (readDate == null) {
+//            readDate = "Ei luettu";
+//        }
+
         CreationStatus status = new CreationStatus();
 
-        if (description.equals("Kuvausta ei ole annettu.")){
+        if (description == null || description.isEmpty()) {
             status.addError("Kuvausta ei ole annettu.");
             return status;
         }
 
-        if (tags.equals("Tägejä ei ole annettu.")){
+        if (tags == null || tags.isEmpty()) {
             status.addError("Tägejä ei ole annettu.");
             return status;
         }
@@ -54,7 +46,7 @@ public class AuthenticationService {
             return status;
         }
 
-        if (link.equals("Vinkillä pitää olla myös linkki!")) {
+        if (link == null || link.isEmpty()) {
             status.addError("Vinkillä pitää olla myös linkki!");
             return status;
         }
@@ -71,7 +63,7 @@ public class AuthenticationService {
 
         if (status.isOk()) {
             status.addNote("Lisääminen onnistui!");
-            Vinkki v = new Vinkki(title, link, description, tags, readDate);
+            Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split(",")));
             vinkkiDao.add(v);
         }
 

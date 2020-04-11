@@ -5,14 +5,14 @@
 <div class="content" id="listwrapper">
     <div class="listitemLink"><a href=$vinkki.link>$vinkki.link</a></div><br>
     <div class="listitemDescription">Kuvaus: $vinkki.description</div>
-    <div class="listitemTags">Tägit:  #foreach($tagi in $vinkki.tags)
+    <div class="listitemTags">Tägit:  #foreach($tagi in $vinkki.tagsList)
     <div class="chip">
     $tagi
     </div>
      #end
     </div>
     <div class="listitemRead">Luettu: $vinkki.readDate</div>
-    <!--<div class="listitemDate">Lisätty: $vinkki.date</div>-->
+    <div class="listitemDate">Lisätty: $vinkki.creationDate</div>
     
 </div>
 #end

@@ -52,6 +52,9 @@ dependencies {
     compile group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.33.0'
     // https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver
     compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.2'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 }
 
 test {

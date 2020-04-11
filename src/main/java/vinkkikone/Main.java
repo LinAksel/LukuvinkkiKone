@@ -7,12 +7,12 @@ import java.util.List;
 import vinkkikone.domain.*;
 import java.util.Properties;
 import vinkkikone.authentication.AuthenticationService;
-import vinkkikone.data_access.FileVinkkiDao;
+//import vinkkikone.data_access.FileVinkkiDao;
 import vinkkikone.util.CreationStatus;
 import spark.ModelAndView;
 import static spark.Spark.*;
 import spark.template.velocity.VelocityTemplateEngine;
-//import vinkkikone.data_access.MongoVinkkiDao;
+import vinkkikone.data_access.MongoVinkkiDao;
 import vinkkikone.data_access.VinkkiDao;
 
 public class Main {
@@ -60,7 +60,7 @@ public class Main {
             String tags = request.queryParams("tags");
             String readDate = request.queryParams("readDate");
 
-            CreationStatus status = authenticationService().createNew(title, link, description, tags, readDate);
+            CreationStatus status = authenticationService().createNew(title, link, description, tags);
 
             if (!status.isOk()) {
                 model.put("error", String.join(",  ", status.errors()));
@@ -80,13 +80,13 @@ public class Main {
 
     public static AuthenticationService authenticationService() {
         if (dao == null) {
-            dao = new FileVinkkiDao("vinkit.txt");
-//            String url = System.getenv("MONGODB_URI");
-//            if (url == null) {
-//                dao = new MongoVinkkiDao(mongoUrl());
-//            } else {
-//                dao = new MongoVinkkiDao(url);
-//            }
+//            dao = new FileVinkkiDao("vinkit.txt");
+            String url = System.getenv("MONGODB_URI");
+            if (url == null) {
+                dao = new MongoVinkkiDao(mongoUrl());
+            } else {
+                dao = new MongoVinkkiDao(url);
+            }
         }
         if (authService == null) {
             authService = new AuthenticationService(dao);
