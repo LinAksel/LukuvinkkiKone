@@ -62,4 +62,16 @@ public class VinkkiDaoForTests implements VinkkiDao {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public List<Vinkki> findByTag(String findme) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void markAsRead(Vinkki vinkki) {
+        // TODO Auto-generated method stub
+
+    }
 }

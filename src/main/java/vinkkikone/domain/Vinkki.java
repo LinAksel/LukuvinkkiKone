@@ -16,17 +16,17 @@ import org.bson.types.ObjectId;
 public class Vinkki implements Serializable {
 
     @Id
-    private ObjectId mongoid;
+    private ObjectId mongoId;
     private String title;
     private String link;
     private String description;
     private List<String> tagsList;
-    //tämä arvo voi olla null tietokannassa
+    // tämä arvo voi olla null tietokannassa
     private String readDate;
-    //tämä arvo ei voi olla koskaan null edes tietokannassa
+    // tämä arvo ei voi olla koskaan null edes tietokannassa
     private String creationDate;
 
-    //ylimääränen konstruktori authservicelle
+    // ylimääränen konstruktori authservicelle
     public Vinkki(String title, String link, String description, List<String> tagsList) {
         this.title = title;
         this.link = link;
