@@ -10,6 +10,7 @@ import static com.mongodb.client.model.Updates.currentDate;
 import static com.mongodb.client.model.Updates.set;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
@@ -63,7 +64,7 @@ public class MongoVinkkiDao implements VinkkiDao {
                 }
                 palautettava.add(new Vinkki(doc.get("_id", ObjectId.class), doc.get("title", String.class),
                         doc.get("link", String.class), doc.get("description", String.class),
-                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class).toString()));
+                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)));
                 // LocalDateTime.ofInstant(doc.get("readdate", Date.class).toInstant(),
                 // ZoneId.systemDefault())));
             });
@@ -71,7 +72,7 @@ public class MongoVinkkiDao implements VinkkiDao {
         } catch (Exception e) {
             System.out.println("Error listing all Vinkki: " + e.getMessage());
         }
-
+        Collections.sort(palautettava);
         return palautettava;
     }
 
@@ -92,8 +93,7 @@ public class MongoVinkkiDao implements VinkkiDao {
             }
             return new Vinkki(document.get("_id", ObjectId.class), document.get("title", String.class),
                     document.get("link", String.class), document.get("description", String.class),
-                    document.getList("tags", String.class), paivays,
-                    document.get("creationDate", Date.class).toString());
+                    document.getList("tags", String.class), paivays, document.get("creationDate", Date.class));
             // LocalDateTime.ofInstant(document.get("readdate", Date.class).toInstant(),
             // ZoneId.systemDefault()));
         } catch (Exception e) {
@@ -123,8 +123,7 @@ public class MongoVinkkiDao implements VinkkiDao {
             }
             Vinkki palautettava = new Vinkki(document.get("_id", ObjectId.class), document.get("title", String.class),
                     document.get("link", String.class), document.get("description", String.class),
-                    document.getList("tags", String.class), paivays,
-                    document.get("creationDate", Date.class).toString());
+                    document.getList("tags", String.class), paivays, document.get("creationDate", Date.class));
             // LocalDateTime.ofInstant(document.get("readdate", Date.class).toInstant(),
             // ZoneId.systemDefault()));
             return palautettava;
@@ -183,7 +182,7 @@ public class MongoVinkkiDao implements VinkkiDao {
                 }
                 palautettava.add(new Vinkki(doc.get("_id", ObjectId.class), doc.get("title", String.class),
                         doc.get("link", String.class), doc.get("description", String.class),
-                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class).toString()
+                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)
                 // ,LocalDateTime.ofInstant(doc.get("readdate", Date.class).toInstant(),
                 // ZoneId.systemDefault())));
                 ));

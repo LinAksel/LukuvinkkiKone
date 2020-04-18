@@ -20,9 +20,9 @@ public class AuthenticationService {
     }
 
     public CreationStatus createNew(String title, String link, String description, String tags) {
-//        if (readDate == null) {
-//            readDate = "Ei luettu";
-//        }
+        // if (readDate == null) {
+        // readDate = "Ei luettu";
+        // }
 
         CreationStatus status = new CreationStatus();
 
@@ -57,7 +57,8 @@ public class AuthenticationService {
         }
 
         if (!tags.contains("Tägejä ei ole annettu.") && (tags.contains(" ") && (!tags.contains(",")))) {
-            status.addError("Anna tägejä enemmän kuin yksi. Tägit pitää erottaa pilkulla! Käytä vain yksisanaisia tägejä.");
+            status.addError(
+                    "Anna tägejä enemmän kuin yksi. Tägit pitää erottaa pilkulla! Käytä vain yksisanaisia tägejä.");
             return status;
         }
 

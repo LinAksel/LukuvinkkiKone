@@ -3,6 +3,7 @@ package vinkkikone;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import vinkkikone.domain.*;
 import java.util.Properties;
@@ -80,7 +81,7 @@ public class Main {
 
     public static AuthenticationService authenticationService() {
         if (dao == null) {
-//            dao = new FileVinkkiDao("vinkit.txt");
+            // dao = new FileVinkkiDao("vinkit.txt");
             String url = System.getenv("MONGODB_URI");
             if (url == null) {
                 dao = new MongoVinkkiDao(mongoUrl());
@@ -110,7 +111,8 @@ public class Main {
 
     static String mongoUrl() {
 
-        // FIXME paikallisen config tiedoston lukija kehityksen tarpeisiin, voi poistaa heroku-versiosta
+        // FIXME paikallisen config tiedoston lukija kehityksen tarpeisiin, voi poistaa
+        // heroku-versiosta
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream("mongo.config"));
@@ -118,7 +120,8 @@ public class Main {
             String mongoUser = properties.getProperty("user");
             String mongoPW = properties.getProperty("password");
             String mongoURL = properties.getProperty("url");
-            //System.out.println("palautetaan url: mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/");
+            // System.out.println("palautetaan url: mongodb+srv://" + mongoUser + ":" +
+            // mongoPW + "@" + mongoURL + "/");
             return "mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
 
         } catch (Exception e) {

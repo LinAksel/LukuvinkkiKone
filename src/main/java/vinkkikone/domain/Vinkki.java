@@ -1,6 +1,7 @@
 package vinkkikone.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +14,7 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Vinkki implements Serializable {
+public class Vinkki implements Serializable, Comparable<Vinkki> {
 
     @Id
     private ObjectId mongoId;
@@ -24,7 +25,7 @@ public class Vinkki implements Serializable {
     // tämä arvo voi olla null tietokannassa
     private String readDate;
     // tämä arvo ei voi olla koskaan null edes tietokannassa
-    private String creationDate;
+    private Date creationDate;
 
     // ylimääränen konstruktori authservicelle
     public Vinkki(String title, String link, String description, List<String> tagsList) {
@@ -32,5 +33,10 @@ public class Vinkki implements Serializable {
         this.link = link;
         this.description = description;
         this.tagsList = tagsList;
+    }
+
+    @Override
+    public int compareTo(Vinkki v) {
+        return v.getCreationDate().compareTo(this.creationDate);
     }
 }
