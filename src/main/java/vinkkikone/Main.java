@@ -111,8 +111,7 @@ public class Main {
 
     static String mongoUrl() {
 
-        // FIXME paikallisen config tiedoston lukija kehityksen tarpeisiin, voi poistaa
-        // heroku-versiosta
+        // FIXME paikallisen config tiedoston lukija kehityksen tarpeisiin
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream("mongo.config"));

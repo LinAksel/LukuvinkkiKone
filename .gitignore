@@ -6,3 +6,4 @@ mongo.config
 bin/
 .nb-gradle/
 .settings/
+nb-project/

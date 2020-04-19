@@ -82,7 +82,8 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
                     fileTree(dir: it,
-                        exclude: ['vinkkikone/data_access/**'])
+                        //exclude: ['vinkkikone/data_access/**'])
+                    )
                 }))
     }
 }
