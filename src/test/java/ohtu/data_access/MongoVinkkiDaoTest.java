@@ -17,18 +17,23 @@ public class MongoVinkkiDaoTest {
     private MongoVinkkiDao md;
 
     public MongoVinkkiDaoTest() throws Exception {
-        Properties properties = new Properties();
-        try {
-            properties.load(new FileInputStream("mongo.config"));
+        url = System.getenv("MONGODB_URI");
+        if (url == null) {
+            Properties properties = new Properties();
+            try {
+                properties.load(new FileInputStream("mongo.config"));
 
-            String mongoUser = properties.getProperty("user");
-            String mongoPW = properties.getProperty("password");
-            String mongoURL = properties.getProperty("url");
-            this.url = "mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
-            this.md = new MongoVinkkiDao(url, collection);
-        } catch (Exception e) {
-            System.out.println("Error reading config file:" + e.getMessage());
+                String mongoUser = properties.getProperty("user");
+                String mongoPW = properties.getProperty("password");
+                String mongoURL = properties.getProperty("url");
+
+                this.url = "mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
+            } catch (Exception e) {
+                System.out.println("Error reading config file:" + e.getMessage());
+            }
         }
+        this.md = new MongoVinkkiDao(url, collection);
+
     }
 
     @Test
