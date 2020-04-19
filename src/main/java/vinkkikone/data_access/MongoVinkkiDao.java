@@ -10,7 +10,6 @@ import static com.mongodb.client.model.Updates.currentDate;
 import static com.mongodb.client.model.Updates.set;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
@@ -29,6 +28,7 @@ public class MongoVinkkiDao implements VinkkiDao {
     public MongoVinkkiDao(String url) {
         this(url, "vinkit");
     }
+
     public MongoVinkkiDao(String url, String collection) {
         this.url = url;
         this.collection = collection;
@@ -61,16 +61,15 @@ public class MongoVinkkiDao implements VinkkiDao {
             MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
             MongoCollection<Document> haetut = database.getCollection(collection);
 
-            haetut.find().sort(new Document("creationDate", -1))
-                    .forEach((Consumer<Document>) doc -> {
-                        String paivays = "Ei luettu";
-                        if (doc.get("readdate") != null) {
-                            paivays = doc.get("readdate", Date.class).toString();
-                        }
-                        palautettava.add(new Vinkki(doc.get("_id", ObjectId.class), doc.get("title", String.class),
-                                doc.get("link", String.class), doc.get("description", String.class),
-                                doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)));
-                    });
+            haetut.find().sort(new Document("creationDate", -1)).forEach((Consumer<Document>) doc -> {
+                String paivays = "Ei luettu";
+                if (doc.get("readdate") != null) {
+                    paivays = doc.get("readdate", Date.class).toString();
+                }
+                palautettava.add(new Vinkki(doc.get("_id", ObjectId.class), doc.get("title", String.class),
+                        doc.get("link", String.class), doc.get("description", String.class),
+                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)));
+            });
             mongoClient.close();
         } catch (Exception e) {
             System.out.println("Error listing all Vinkki: " + e.getMessage());
@@ -177,8 +176,7 @@ public class MongoVinkkiDao implements VinkkiDao {
                 }
                 palautettava.add(new Vinkki(doc.get("_id", ObjectId.class), doc.get("title", String.class),
                         doc.get("link", String.class), doc.get("description", String.class),
-                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)
-                ));
+                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)));
             });
             mongoClient.close();
         } catch (Exception e) {
@@ -200,7 +198,7 @@ public class MongoVinkkiDao implements VinkkiDao {
         }
     }
 
-    //erityisesti testaukseen, poistaa kaikki, ei vinkkiDao kautta vaan suoraan
+    // erityisesti testaukseen, poistaa kaikki, ei vinkkiDao kautta vaan suoraan
     public void clearCollection() {
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");

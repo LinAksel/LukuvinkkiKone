@@ -24,7 +24,7 @@ public class MongoVinkkiDaoTest {
             String mongoUser = properties.getProperty("user");
             String mongoPW = properties.getProperty("password");
             String mongoURL = properties.getProperty("url");
-            this.url = "mongodb+srv://test-" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
+            this.url = "mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
             this.md = new MongoVinkkiDao(url, collection);
         } catch (Exception e) {
             System.out.println("Error reading config file:" + e.getMessage());
@@ -85,15 +85,6 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void canMarkAnEntryAsRead() {
-        this.md.clearCollection();
-        md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
-        Vinkki vinkki = md.listAll().get(0);
-        md.markAsRead(vinkki);
-        assertEquals("Ei luettu", md.listAll().get(0).getReadDate());
-    }
-
-    @Test
     public void readEntryGetsValidReaddate() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
@@ -118,6 +109,13 @@ public class MongoVinkkiDaoTest {
         md.markAsRead(md.findByTitle("titteli"));
         assertNotEquals("Ei luettu", md.findByTitle("titteli").getReadDate());
         this.md.clearCollection();
+    }
+
+    @Test
+    public void canFindById() {
+        md.add(new Vinkki("Title", "Link", "Joku kuvaus", new ArrayList<>()));
+        Vinkki vinkki = md.listAll().get(0);
+        assertEquals(vinkki, md.findById(vinkki.getMongoId()));
     }
 
     @Test

@@ -14,7 +14,7 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Vinkki implements Serializable, Comparable<Vinkki> {
+public class Vinkki implements Serializable {
 
     @Id
     private ObjectId mongoId;
@@ -33,10 +33,5 @@ public class Vinkki implements Serializable, Comparable<Vinkki> {
         this.link = link;
         this.description = description;
         this.tagsList = tagsList;
-    }
-
-    @Override
-    public int compareTo(Vinkki v) {
-        return v.getCreationDate().compareTo(this.creationDate);
     }
 }
