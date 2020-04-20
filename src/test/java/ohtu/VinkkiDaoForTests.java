@@ -1,4 +1,3 @@
-
 package ohtu;
 
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ public class VinkkiDaoForTests implements VinkkiDao {
     }
 
     @Override
-    public List<Vinkki> findByTag(String findme) {
+    public List<Vinkki> searchByTag(String findme) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -73,5 +72,21 @@ public class VinkkiDaoForTests implements VinkkiDao {
     public void markAsRead(Vinkki vinkki) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void markAsUnread(Vinkki vinkki) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public List<Vinkki> searchByTitleAndTag(String title, String tag) {
+        return null;
+    }
+    
+    @Override
+    public List<Vinkki> searchByTitle(String title) {
+        return null;
     }
 }
