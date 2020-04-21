@@ -3,7 +3,7 @@
 #foreach($vinkki in $list)
 <button type="button" class="collapsible">$vinkki.title</button>
 <div class="content" id="listwrapper">
-    <div class="listitemLink"><a href=$vinkki.link>$vinkki.link</a></div><br>
+    <div class="listitemLink"><a href=$vinkki.link target="_blank">$vinkki.link </a></div><br>
     <div class="listitemDescription">Kuvaus: $vinkki.description</div>
     <div class="listitemTags">Tägit:  #foreach($tagi in $vinkki.tagsList)
     <div class="chip">
@@ -16,6 +16,8 @@
     
 </div>
 #end
+<!--kokeilukoodi alla-->
+<!--<a href="https://www.thesitewizard.com/" target="_blank">thesitewizard.com</a>-->
 <!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->
 <script>
     var coll = document.getElementsByClassName("collapsible");
