@@ -3,7 +3,13 @@
 #foreach($vinkki in $list)
 <button type="button" class="collapsible">$vinkki.title</button>
 <div class="content" id="listwrapper">
-    <div class="listitemLink"><a href=$vinkki.link target="_blank">$vinkki.link </a></div><br>
+    <!--tässä kohdassa tarkistetaan, että sisältääkö linkki sanan http ja sen mukaisesti linkin käsketään avautua omaan tabiin joko http lisättynä tai ei-->
+    <div class="listitemLink"> 
+        #if ($vinkki.link.contains("http")) <a href=$vinkki.link target="_blank">$vinkki.link </a>
+         #else<a href=http://$vinkki.link target="_blank">$vinkki.link </a> 
+         #end
+        </div><br>
+
     <div class="listitemDescription">Kuvaus: $vinkki.description</div>
     <div class="listitemTags">Tägit:  #foreach($tagi in $vinkki.tagsList)
     <div class="chip">
@@ -17,7 +23,7 @@
 </div>
 #end
 <!--kokeilukoodi alla-->
-<!--<a href="https://www.thesitewizard.com/" target="_blank">thesitewizard.com</a>-->
+
 <!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->
 <script>
     var coll = document.getElementsByClassName("collapsible");
