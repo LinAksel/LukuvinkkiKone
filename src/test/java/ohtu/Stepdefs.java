@@ -31,6 +31,11 @@ public class Stepdefs {
         pageHasContent(content);
     }
 
+    @Then ("http:// is added in the beginning of link")
+    public void httpAddedToTheLink(){
+        pageHasContent("http://www.teos.fi/kirjat/kaikki/2004/pussikaljaromaani.html");
+    }
+
     @Given("list is selected")
     public void listIsSelected() {
         driver.get(baseUrl);
