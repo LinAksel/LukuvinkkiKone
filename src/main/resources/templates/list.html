@@ -1,27 +1,46 @@
 <h1>Vinkit</h1>
 <!--Tässä tulostuu jokainen vinkki-->
 #foreach($vinkki in $list)
-<button type="button" class="collapsible">$vinkki.title</button>
+<button id="titleButton" type="button" class="collapsible">$vinkki.title</button>
 <div class="content" id="listwrapper">
     <!--tässä kohdassa tarkistetaan, että sisältääkö linkki sanan http ja sen mukaisesti linkin käsketään avautua omaan tabiin joko http lisättynä tai ei-->
     <div class="listitemLink"> 
         #if ($vinkki.link.contains("http")) <a href=$vinkki.link target="_blank">$vinkki.link </a>
-         #else<a href=http://$vinkki.link target="_blank">$vinkki.link </a> 
-         #end
-        </div><br>
+        #else<a href=http://$vinkki.link target="_blank">$vinkki.link </a> 
+        #end
+    </div><br>
 
     <div class="listitemDescription">Kuvaus: $vinkki.description</div>
     <div class="listitemTags">Tägit:  #foreach($tagi in $vinkki.tagsList)
-    <div class="chip">
-    $tagi
+        <div class="chip">
+            $tagi
+        </div>
+        #end
     </div>
-     #end
+    <!--haetaan tietokannasta tieto, onko vinkki luettu ja lisätään nappi sen mukaan-->
+    <div class="listitemRead" id ="notread">
+        #if ($vinkki.readDate.contains("Ei luettu"))
+        <p>Ei luettu</p>
+        <form id="readForm" action="/list" method="POST"  name="readForm" >
+            <input type="hidden" id="readDateTitle" name="readDateTitle" value=$vinkki.title>
+            <input id="readSend" type="submit" value="Merkitse luetuksi" />
+        </form><br>
     </div>
-    <div class="listitemRead">Luettu: $vinkki.readDate</div>
+    #else
+    <div class="listitemRead" id ="read">
+        <p>Luettu: $vinkki.readDate</p>
+        <form id="notReadForm" action="/list1" method="POST">
+            <input type="hidden" id="removeReadDate" name="removeReadDate" value=$vinkki.title>
+            <input id="notReadSend" type="submit" value="Poista lukupäivämäärä" />
+        </form><br>
+        #end
+    </div>
+    <br>
     <div class="listitemDate">Lisätty: $vinkki.creationDate</div>
-    
+
 </div>
 #end
+
 <!--kokeilukoodi alla-->
 
 <!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->

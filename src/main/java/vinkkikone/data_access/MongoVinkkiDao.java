@@ -8,6 +8,7 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.currentDate;
 import static com.mongodb.client.model.Updates.set;
+import static com.mongodb.client.model.Updates.unset;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -242,21 +243,21 @@ public class MongoVinkkiDao implements VinkkiDao {
             haetut.updateOne(eq("_id", vinkki.getMongoId()), currentDate("readdate"));
 
         } catch (Exception e) {
-            System.out.println("Error in markAsRead: " + e.getMessage());
+            System.out.println("Error in markAsRead: " + e.getMessage() + " with title: " + vinkki.getTitle());
         }
     }
 
     @Override
     public void markAsUnread(Vinkki vinkki) {
-//        try (MongoClient mongoClient = MongoClients.create(url)) {
-//            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
-//            MongoCollection<Document> haetut = database.getCollection(collection);
-//
-//            haetut.updateOne(eq("_id", vinkki.getMongoId()), currentDate("readdate"));
-//
-//        } catch (Exception e) {
-//            System.out.println("Error in markAsRead: " + e.getMessage());
-//        }
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+            MongoCollection<Document> haetut = database.getCollection(collection);
+
+            haetut.updateOne(eq("_id", vinkki.getMongoId()), unset("readdate"));
+
+        } catch (Exception e) {
+            System.out.println("Error in markAsUnread: " + e.getMessage() + " with title: " + vinkki.getTitle());
+        }
     }
 
     // erityisesti testaukseen, poistaa kaikki, ei vinkkiDao kautta vaan suoraan
@@ -266,5 +267,32 @@ public class MongoVinkkiDao implements VinkkiDao {
             MongoCollection<Document> haetut = database.getCollection(collection);
             haetut.deleteMany(new Document());
         }
+    }
+
+    // hakee ja palauttaa kokonaisen vinkin nimen perusteella
+    @Override
+    public Vinkki getByTitle(String title) {
+        Vinkki v = new Vinkki();
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+            MongoCollection<Document> haetut = database.getCollection(collection);
+            Document document = haetut.find(eq("title", title)).first();
+            if (document == null) {
+                mongoClient.close();
+                return null;
+            }
+            String paivays = null;
+            if (document.get("readdate") != null) {
+                paivays = document.get("readdate", Date.class).toString();
+            }
+            v = new Vinkki(document.get("_id", ObjectId.class), document.get("title", String.class),
+                    document.get("link", String.class), document.get("description", String.class),
+                    document.getList("tags", String.class), paivays, document.get("creationDate", Date.class));
+            v.setReadDate(paivays);
+            mongoClient.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return v;
     }
 }
