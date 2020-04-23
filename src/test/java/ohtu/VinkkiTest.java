@@ -24,15 +24,6 @@ public class VinkkiTest {
         vinkki = new Vinkki("Ronja ryövärintytär", "www.kirjat.fi", "Kirja iloisista lapsista", lista);
     }
 
-    // @Test
-    // public void newVinkkiWithMongoId() {
-    // Vinkki vinkki = new Vinkki(new ObjectId("111111111111111111111111"), "Ronja
-    // ryövärintytär", "www.helsinki.fi");
-    // assertEquals(vinkki.getMongoId(), new ObjectId("111111111111111111111111"));
-    // assertEquals(vinkki.getTitle(), "Ronja ryövärintytär");
-    // assertEquals(vinkki.getLink(), "www.helsinki.fi");
-    // }
-
     @Test
     public void setMongoIdSetsMongoId() {
         vinkki.setMongoId(new ObjectId("111111111111111111111111"));
@@ -53,13 +44,6 @@ public class VinkkiTest {
 
         assertEquals("Ronja ryövärintytär", vinkki.getTitle());
     }
-
-    // @Test
-    // public void toStringIsGivingTheRightString() {
-    // vinkki.setTitle("Ronja ryövärintytär");
-    // vinkki.setLink("www.helsinki.fi");
-    // assertEquals("Ronja ryövärintytär, www.helsinki.fi", vinkki.toString());
-    // }
 
     @Test
     public void setDescriptionSetsDescription() {

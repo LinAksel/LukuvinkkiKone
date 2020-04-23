@@ -105,48 +105,54 @@ public class MongoVinkkiDao implements VinkkiDao {
 
     public List<Vinkki> searchByTitle(String title) {
         List<Vinkki> palautettava = new ArrayList<>();
-//        try (MongoClient mongoClient = MongoClients.create(url)) {
-//            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
-//            MongoCollection<Document> haetut = database.getCollection(collection);
-//            Document document = haetut.find(eq("title", title)).first();
-//            if (document == null) {
-//                mongoClient.close();
-//                return null;
-//            }
-//            String paivays = "Ei luettu";
-//            if (document.get("readdate") != null) {
-//                paivays = document.get("readdate", Date.class).toString();
-//            }
-//            return new Vinkki(document.get("_id", ObjectId.class), document.get("title", String.class),
-//                    document.get("link", String.class), document.get("description", String.class),
-//                    document.getList("tags", String.class), paivays, document.get("creationDate", Date.class));
-//        } catch (Exception e) {
-//            System.out.println("Error: " + e.getMessage());
-//        }
+        // try (MongoClient mongoClient = MongoClients.create(url)) {
+        // MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+        // MongoCollection<Document> haetut = database.getCollection(collection);
+        // Document document = haetut.find(eq("title", title)).first();
+        // if (document == null) {
+        // mongoClient.close();
+        // return null;
+        // }
+        // String paivays = "Ei luettu";
+        // if (document.get("readdate") != null) {
+        // paivays = document.get("readdate", Date.class).toString();
+        // }
+        // return new Vinkki(document.get("_id", ObjectId.class), document.get("title",
+        // String.class),
+        // document.get("link", String.class), document.get("description",
+        // String.class),
+        // document.getList("tags", String.class), paivays, document.get("creationDate",
+        // Date.class));
+        // } catch (Exception e) {
+        // System.out.println("Error: " + e.getMessage());
+        // }
         return palautettava;
 
     }
 
     public List<Vinkki> searchByTitleAndTag(String title, String tag) {
         List<Vinkki> palautettava = new ArrayList<>();
-//        try (MongoClient mongoClient = MongoClients.create(url)) {
-//            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
-//            MongoCollection<Document> haetut = database.getCollection(collection);
-//            Document document = haetut.find(eq("title", title)).first();
-//            if (document == null) {
-//                mongoClient.close();
-//                return null;
-//            }
-//            String paivays = "Ei luettu";
-//            if (document.get("readdate") != null) {
-//                paivays = document.get("readdate", Date.class).toString();
-//            }
-//            return new Vinkki(document.get("_id", ObjectId.class), document.get("title", String.class),
-//                    document.get("link", String.class), document.get("description", String.class),
-//                    document.getList("tags", String.class), paivays, document.get("creationDate", Date.class));
-//        } catch (Exception e) {
-//            System.out.println("Error: " + e.getMessage());
-//        }
+        // try (MongoClient mongoClient = MongoClients.create(url)) {
+        // MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+        // MongoCollection<Document> haetut = database.getCollection(collection);
+        // Document document = haetut.find(eq("title", title)).first();
+        // if (document == null) {
+        // mongoClient.close();
+        // return null;
+        // }
+        // String paivays = "Ei luettu";
+        // if (document.get("readdate") != null) {
+        // paivays = document.get("readdate", Date.class).toString();
+        // }
+        // return new Vinkki(document.get("_id", ObjectId.class), document.get("title",
+        // String.class),
+        // document.get("link", String.class), document.get("description",
+        // String.class),
+        // document.getList("tags", String.class), paivays, document.get("creationDate",
+        // Date.class));
+        // } catch (Exception e) {
+        // System.out.println("Error: " + e.getMessage());
+        // }
         return palautettava;
 
     }
