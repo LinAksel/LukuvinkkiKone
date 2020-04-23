@@ -18,46 +18,48 @@
         #end
     </div>
     <!--haetaan tietokannasta tieto, onko vinkki luettu ja lisätään nappi sen mukaan-->
-    <div class="listitemRead" id ="notread">
+    <div id="readornot">
         #if ($vinkki.readDate.contains("Ei luettu"))
-        <p>Ei luettu</p>
-        <form id="readForm" action="/list" method="POST"  name="readForm" >
-            <input type="hidden" id="readDateTitle" name="readDateTitle" value=$vinkki.title>
-            <input id="readSend" type="submit" value="Merkitse luetuksi" />
-        </form><br>
+        <div class="listitemRead" id ="notread">
+            <div class="listitemRead" id ="notread">
+                <p>Ei luettu</p>
+                <form id="readForm" action="/list" method="POST"  name="readForm" >
+                    <input type="hidden" id="readDateTitle" name="readDateTitle" value=$vinkki.title>
+                    <input id="readSend" type="submit" value="Merkitse luetuksi" />
+                </form><br>
+            </div>
+            #else
+            <div class="listitemRead" id ="read">
+                <p>Luettu: $vinkki.readDate</p>
+                <form id="notReadForm" action="/list1" method="POST">
+                    <input type="hidden" id="removeReadDate" name="removeReadDate" value=$vinkki.title>
+                    <input id="notReadSend" type="submit" value="Poista lukupäivämäärä" />
+                </form><br>
+                #end
+            </div>
+            <br>
+            <div class="listitemDate">Lisätty: $vinkki.creationDate</div>
+        </div>
     </div>
-    #else
-    <div class="listitemRead" id ="read">
-        <p>Luettu: $vinkki.readDate</p>
-        <form id="notReadForm" action="/list1" method="POST">
-            <input type="hidden" id="removeReadDate" name="removeReadDate" value=$vinkki.title>
-            <input id="notReadSend" type="submit" value="Poista lukupäivämäärä" />
-        </form><br>
-        #end
-    </div>
-    <br>
-    <div class="listitemDate">Lisätty: $vinkki.creationDate</div>
+    #end
 
-</div>
-#end
+    <!--kokeilukoodi alla-->
 
-<!--kokeilukoodi alla-->
+    <!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
 
-<!--Collapsible koodi osoitteesta https://www.w3schools.com/howto/howto_js_collapsible.asp-->
-<script>
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-
-    for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
-        });
-    }
-</script>
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
 

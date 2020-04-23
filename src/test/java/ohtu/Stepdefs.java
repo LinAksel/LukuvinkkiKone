@@ -54,7 +54,7 @@ public class Stepdefs {
     @Given("mark as read is selected")
     public void markedAsRead() {
         driver.get(baseUrl + "/list");
-        WebElement element = driver.findElement(By.id("notread"));
+        WebElement element = driver.findElement(By.id("readornot"));
         element.click();
     }
 
