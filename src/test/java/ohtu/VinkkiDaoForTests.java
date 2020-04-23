@@ -89,4 +89,10 @@ public class VinkkiDaoForTests implements VinkkiDao {
     public List<Vinkki> searchByTitle(String title) {
         return null;
     }
+
+    @Override
+    public Vinkki getByTitle(String title) {
+        //TODO
+        return null;
+    }
 }

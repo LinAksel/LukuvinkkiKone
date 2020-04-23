@@ -19,6 +19,10 @@ public class AuthenticationService {
         return vinkkiDao.listAll();
     }
 
+    public Vinkki getByTitle(String title) {
+        return vinkkiDao.getByTitle(title);
+    }
+
     public CreationStatus createNew(String title, String link, String description, String tags) {
         // if (readDate == null) {
         // readDate = "Ei luettu";

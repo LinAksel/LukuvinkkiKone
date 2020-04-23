@@ -47,6 +47,35 @@ public class Main {
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
+        //merkitään luetuksi tai poistetaan merkintä
+        post("/list", (request, response) -> {
+            System.out.println("tulin lisäämään lukumerkinnän");
+            String title = request.queryParams("readDateTitle");
+            System.out.println("title: " + title);
+            Vinkki v = authenticationService().getByTitle(title);
+            dao.markAsRead(v);
+            HashMap<String, Object> model = new HashMap<>();
+            List<Vinkki> lista = authenticationService().getList();
+            model.put("list", lista);
+            model.put("template", "templates/list.html");
+            return new ModelAndView(model, LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        //Poista luettu-merkintä
+        post("/list1", (request, response) -> {
+            System.out.println("tulin poistamaan lukumerkintää");
+            HashMap<String, Object> model = new HashMap<>();
+            String title = request.queryParams("removeReadDate");
+            System.out.println("title: " + title);
+            Vinkki v = authenticationService().getByTitle(title);
+            dao.markAsUnread(v);
+            List<Vinkki> lista = authenticationService().getList();
+            model.put("list", lista);
+            model.put("template", "templates/list.html");
+            return new ModelAndView(model, LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        //add
         get("/addnew", (request, response) -> {
             HashMap<String, String> model = new HashMap<>();
             model.put("template", "templates/addnew.html");

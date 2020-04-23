@@ -4,6 +4,7 @@ import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import java.time.LocalDate;
 import static org.junit.Assert.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
@@ -11,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class Stepdefs {
+
     WebDriver driver = new HtmlUnitDriver();
     String baseUrl = "http://localhost:4567";
 
@@ -20,19 +22,19 @@ public class Stepdefs {
         WebElement element = driver.findElement(By.linkText("Lisää uusi vinkki!"));
         element.click();
     }
-    
+
     @When("title {string}, link {string}, description {string} and tags {string} are given")
     public void correctTitleAndLinkAreGiven(String title, String link, String description, String tags) {
-        lisaa(title, link,description, tags);
+        lisaa(title, link, description, tags);
     }
 
     @Then("system will respond with {string}")
-    public void userIsLoggedIn(String content) {
+    public void newItemWasAdded(String content) {
         pageHasContent(content);
     }
 
-    @Then ("http:// is added in the beginning of link")
-    public void httpAddedToTheLink(){
+    @Then("http:// is added in the beginning of link")
+    public void httpAddedToTheLink() {
         pageHasContent("http://www.teos.fi/kirjat/kaikki/2004/pussikaljaromaani.html");
     }
 
@@ -43,25 +45,48 @@ public class Stepdefs {
         element.click();
     }
 
-    @Then ("list page opens")
-    public void listIsShown(){
+    @Then("list page opens")
+    public void listIsShown() {
         pageHasContent("Seitsemän veljestä");
         pageHasContent("Paroni von Münchhausen");
-
     }
 
-   @Given("app is started")
-   public void mainPageIsStarted(){
-        driver.get(baseUrl);
-   }
+    @Given("mark as read is selected")
+    public void markedAsRead() {
+        driver.get(baseUrl + "/list");
+        WebElement element = driver.findElement(By.id("readornot"));
+        element.click();
+    }
 
-   @Then ("main page opens")
-   public void mainPageIsShown(){
+    @Then("read date is added")
+    public void readDateIsAdded() {
+        pageHasContent("Luettu:");
+    }
+
+    @Given("remove read date is selected")
+    public void removeReadDate() {
+        driver.get(baseUrl + "/list");
+        WebElement element = driver.findElement(By.id("read"));
+        element.click();
+    }
+
+    @Then("read date is removed")
+    public void readDateIsRemoved() {
+        assertFalse("Luettu:", false);
+    }
+
+    @Given("app is started")
+    public void mainPageIsStarted() {
+        driver.get(baseUrl);
+    }
+
+    @Then("main page opens")
+    public void mainPageIsShown() {
         pageHasContent("Lukuvinkkikone");
         pageHasContent("Listaa vinkit");
         pageHasContent("Lisää uusi vinkki!");
 
-   }
+    }
 
     @After
     public void tearDown() {
@@ -69,7 +94,6 @@ public class Stepdefs {
     }
 
     /* helper methods */
-
     private void pageHasContent(String content) {
         assertTrue(driver.getPageSource().contains(content));
     }
