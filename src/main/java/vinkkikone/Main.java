@@ -49,7 +49,9 @@ public class Main {
 
         //merkitään luetuksi tai poistetaan merkintä
         post("/list", (request, response) -> {
+            System.out.println("tulin lisäämään lukumerkinnän");
             String title = request.queryParams("readDateTitle");
+            System.out.println("title: " + title);
             Vinkki v = authenticationService().getByTitle(title);
             dao.markAsRead(v);
             HashMap<String, Object> model = new HashMap<>();
@@ -61,7 +63,7 @@ public class Main {
 
         //Poista luettu-merkintä
         post("/list1", (request, response) -> {
-            System.out.println("tulin tänne asti");
+            System.out.println("tulin poistamaan lukumerkintää");
             HashMap<String, Object> model = new HashMap<>();
             String title = request.queryParams("removeReadDate");
             System.out.println("title: " + title);
