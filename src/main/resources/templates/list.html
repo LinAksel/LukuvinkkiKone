@@ -1,17 +1,29 @@
 <h1>Vinkit</h1>
+
+<div class="form">
+    <form method="POST" action="/listTag" id="tagForm">
+        <label for="ftag">Hae tägillä:</label>
+        <input type="text" name="tagSearchField" id="tagSearch" size="30"
+            placeholder="Hae tägillä tai resetoi tyhjällä" />
+        <input name="search" type="submit" value="Hae" />
+        #if( $searchTag )
+        <div class="chip">$searchTag</div>
+        #end
+    </form>
+</div>
 <!--Tässä tulostuu jokainen vinkki-->
 #foreach($vinkki in $list)
 <button id="titleButton" type="button" class="collapsible">$vinkki.title</button>
 <div class="content" id="listwrapper">
     <!--tässä kohdassa tarkistetaan, että sisältääkö linkki sanan http ja sen mukaisesti linkin käsketään avautua omaan tabiin joko http lisättynä tai ei-->
-    <div class="listitemLink"> 
+    <div class="listitemLink">
         #if ($vinkki.link.contains("http")) <a href=$vinkki.link target="_blank">$vinkki.link </a>
-        #else<a href=http://$vinkki.link target="_blank">$vinkki.link </a> 
+        #else<a href=http://$vinkki.link target="_blank">$vinkki.link </a>
         #end
     </div><br>
 
     <div class="listitemDescription">Kuvaus: $vinkki.description</div>
-    <div class="listitemTags">Tägit:  #foreach($tagi in $vinkki.tagsList)
+    <div class="listitemTags">Tägit: #foreach($tagi in $vinkki.tagsList)
         <div class="chip">
             $tagi
         </div>
@@ -20,16 +32,16 @@
     <!--haetaan tietokannasta tieto, onko vinkki luettu ja lisätään nappi sen mukaan-->
     <div id="readornot">
         #if ($vinkki.readDate.contains("Ei luettu"))
-        <div class="listitemRead" id ="notread">
-            <div class="listitemRead" id ="notread">
+        <div class="listitemRead" id="notread">
+            <div class="listitemRead" id="notread">
                 <p>Ei luettu</p>
-                <form id="readForm" action="/list" method="POST"  name="readForm" >
+                <form id="readForm" action="/list" method="POST" name="readForm">
                     <input type="hidden" id="readDateTitle" name="readDateTitle" value=$vinkki.title>
                     <input id="readSend" type="submit" value="Merkitse luetuksi" />
                 </form><br>
             </div>
             #else
-            <div class="listitemRead" id ="read">
+            <div class="listitemRead" id="read">
                 <p>Luettu: $vinkki.readDate</p>
                 <form id="notReadForm" action="/list1" method="POST">
                     <input type="hidden" id="removeReadDate" name="removeReadDate" value=$vinkki.title>
@@ -62,4 +74,3 @@
             });
         }
     </script>
-

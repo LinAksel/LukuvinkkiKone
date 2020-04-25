@@ -1,15 +1,17 @@
 package ohtu;
 
-import io.cucumber.java.After;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
-import java.time.LocalDate;
-import static org.junit.Assert.*;
-import org.openqa.selenium.WebDriver;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class Stepdefs {
 
@@ -88,6 +90,27 @@ public class Stepdefs {
 
     }
 
+    @When("tag {string} is entered")
+    public void tagIsEntered(String tagi) {
+        WebElement element = driver.findElement(By.name("tagSearchField"));
+        element.sendKeys(tagi);
+        element = driver.findElement(By.name("search"));
+        element.submit();
+    }
+
+    @Then("page has content {string}")
+    public void pageHasCertainContent(String tagi) {
+        pageHasContent(tagi);
+    }
+
+    // Tyhjän tägin testi, jossa oli Then-vaiheessa kryptinen ongelma, tähän paluu
+    // sunnuntaina
+    // @When("empty tag is entered")
+    // public void emptyTagIsEntered() {
+    // WebElement element = driver.findElement(By.name("search"));
+    // element.submit();
+    // }
+
     @After
     public void tearDown() {
         driver.quit();
@@ -96,6 +119,11 @@ public class Stepdefs {
     /* helper methods */
     private void pageHasContent(String content) {
         assertTrue(driver.getPageSource().contains(content));
+    }
+
+    // Tällä voi testata että hakuun ei tule ylimääräistä
+    private void pageDoesntHaveContent(String content) {
+        assertTrue(!driver.getPageSource().contains(content));
     }
 
     private void lisaa(String title, String link, String description, String tags) {

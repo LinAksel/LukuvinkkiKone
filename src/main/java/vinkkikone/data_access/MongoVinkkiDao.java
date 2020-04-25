@@ -106,6 +106,9 @@ public class MongoVinkkiDao implements VinkkiDao {
 
     @Override
     public List<Vinkki> searchByTag(String findme) {
+        if (findme.isEmpty()) {
+            return this.listAll();
+        }
         List<Vinkki> palautettava = new ArrayList<>();
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
@@ -128,25 +131,21 @@ public class MongoVinkkiDao implements VinkkiDao {
     }
 
     // Jos tekee search toiminnon kuvauksille pitää index:iä muuttaa mongosta
-    
+
     public List<Vinkki> searchByTitle(String title) {
         List<Vinkki> palautettava = new ArrayList<>();
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
             MongoCollection<Document> haetut = database.getCollection(collection);
-            haetut.find(Filters.text(title))
-                    .forEach((Consumer<Document>) document -> {
-                        String paivays = "Ei luettu";
-                        if (document.get("readdate") != null) {
-                            paivays = document.get("readdate", Date.class).toString();
-                        }
-                        palautettava.add(new Vinkki(document.get("_id", ObjectId.class), document.get("title",
-                                String.class),
-                                document.get("link", String.class), document.get("description",
-                                String.class),
-                                document.getList("tags", String.class), paivays, document.get("creationDate",
-                                Date.class)));
-                    });
+            haetut.find(Filters.text(title)).forEach((Consumer<Document>) document -> {
+                String paivays = "Ei luettu";
+                if (document.get("readdate") != null) {
+                    paivays = document.get("readdate", Date.class).toString();
+                }
+                palautettava.add(new Vinkki(document.get("_id", ObjectId.class), document.get("title", String.class),
+                        document.get("link", String.class), document.get("description", String.class),
+                        document.getList("tags", String.class), paivays, document.get("creationDate", Date.class)));
+            });
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -159,19 +158,15 @@ public class MongoVinkkiDao implements VinkkiDao {
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
             MongoCollection<Document> haetut = database.getCollection(collection);
-            haetut.find(and(Filters.text(title), in("tags", tag)))
-                    .forEach((Consumer<Document>) document -> {
-                        String paivays = "Ei luettu";
-                        if (document.get("readdate") != null) {
-                            paivays = document.get("readdate", Date.class).toString();
-                        }
-                        palautettava.add(new Vinkki(document.get("_id", ObjectId.class), document.get("title",
-                                String.class),
-                                document.get("link", String.class), document.get("description",
-                                String.class),
-                                document.getList("tags", String.class), paivays, document.get("creationDate",
-                                Date.class)));
-                    });
+            haetut.find(and(Filters.text(title), in("tags", tag))).forEach((Consumer<Document>) document -> {
+                String paivays = "Ei luettu";
+                if (document.get("readdate") != null) {
+                    paivays = document.get("readdate", Date.class).toString();
+                }
+                palautettava.add(new Vinkki(document.get("_id", ObjectId.class), document.get("title", String.class),
+                        document.get("link", String.class), document.get("description", String.class),
+                        document.getList("tags", String.class), paivays, document.get("creationDate", Date.class)));
+            });
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -273,7 +268,8 @@ public class MongoVinkkiDao implements VinkkiDao {
         }
     }
 
-    // hakee ja palauttaa ensimmäisen osuman nimen perusteella, etsitään aiempia kopioita
+    // hakee ja palauttaa ensimmäisen osuman nimen perusteella, etsitään aiempia
+    // kopioita
     @Override
     public Vinkki getByTitle(String title) {
         Vinkki v = new Vinkki();

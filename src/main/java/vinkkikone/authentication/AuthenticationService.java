@@ -23,6 +23,10 @@ public class AuthenticationService {
         return vinkkiDao.getByTitle(title);
     }
 
+    public List<Vinkki> getByTag(String tag) {
+        return vinkkiDao.searchByTag(tag);
+    }
+
     public CreationStatus createNew(String title, String link, String description, String tags) {
         // if (readDate == null) {
         // readDate = "Ei luettu";
