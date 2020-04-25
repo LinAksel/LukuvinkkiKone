@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.currentDate;
@@ -103,58 +104,78 @@ public class MongoVinkkiDao implements VinkkiDao {
 
     }
 
+    @Override
+    public List<Vinkki> searchByTag(String findme) {
+        List<Vinkki> palautettava = new ArrayList<>();
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+            MongoCollection<Document> haetut = database.getCollection(collection);
+            haetut.find(eq("tags", findme)).forEach((Consumer<Document>) doc -> {
+                String paivays = "Ei luettu";
+                if (doc.get("readdate") != null) {
+                    paivays = doc.get("readdate", Date.class).toString();
+                }
+                palautettava.add(new Vinkki(doc.get("_id", ObjectId.class), doc.get("title", String.class),
+                        doc.get("link", String.class), doc.get("description", String.class),
+                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)));
+            });
+            mongoClient.close();
+        } catch (Exception e) {
+            System.out.println("Error in findByTag: " + e.getMessage());
+            return new ArrayList<>();
+        }
+        return palautettava;
+    }
+
+    // Jos tekee search toiminnon kuvauksille pitää index:iä muuttaa mongosta
+    
     public List<Vinkki> searchByTitle(String title) {
         List<Vinkki> palautettava = new ArrayList<>();
-        // try (MongoClient mongoClient = MongoClients.create(url)) {
-        // MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
-        // MongoCollection<Document> haetut = database.getCollection(collection);
-        // Document document = haetut.find(eq("title", title)).first();
-        // if (document == null) {
-        // mongoClient.close();
-        // return null;
-        // }
-        // String paivays = "Ei luettu";
-        // if (document.get("readdate") != null) {
-        // paivays = document.get("readdate", Date.class).toString();
-        // }
-        // return new Vinkki(document.get("_id", ObjectId.class), document.get("title",
-        // String.class),
-        // document.get("link", String.class), document.get("description",
-        // String.class),
-        // document.getList("tags", String.class), paivays, document.get("creationDate",
-        // Date.class));
-        // } catch (Exception e) {
-        // System.out.println("Error: " + e.getMessage());
-        // }
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+            MongoCollection<Document> haetut = database.getCollection(collection);
+            haetut.find(Filters.text(title))
+                    .forEach((Consumer<Document>) document -> {
+                        String paivays = "Ei luettu";
+                        if (document.get("readdate") != null) {
+                            paivays = document.get("readdate", Date.class).toString();
+                        }
+                        palautettava.add(new Vinkki(document.get("_id", ObjectId.class), document.get("title",
+                                String.class),
+                                document.get("link", String.class), document.get("description",
+                                String.class),
+                                document.getList("tags", String.class), paivays, document.get("creationDate",
+                                Date.class)));
+                    });
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
         return palautettava;
 
     }
 
     public List<Vinkki> searchByTitleAndTag(String title, String tag) {
         List<Vinkki> palautettava = new ArrayList<>();
-        // try (MongoClient mongoClient = MongoClients.create(url)) {
-        // MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
-        // MongoCollection<Document> haetut = database.getCollection(collection);
-        // Document document = haetut.find(eq("title", title)).first();
-        // if (document == null) {
-        // mongoClient.close();
-        // return null;
-        // }
-        // String paivays = "Ei luettu";
-        // if (document.get("readdate") != null) {
-        // paivays = document.get("readdate", Date.class).toString();
-        // }
-        // return new Vinkki(document.get("_id", ObjectId.class), document.get("title",
-        // String.class),
-        // document.get("link", String.class), document.get("description",
-        // String.class),
-        // document.getList("tags", String.class), paivays, document.get("creationDate",
-        // Date.class));
-        // } catch (Exception e) {
-        // System.out.println("Error: " + e.getMessage());
-        // }
+        try (MongoClient mongoClient = MongoClients.create(url)) {
+            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
+            MongoCollection<Document> haetut = database.getCollection(collection);
+            haetut.find(and(Filters.text(title), in("tags", tag)))
+                    .forEach((Consumer<Document>) document -> {
+                        String paivays = "Ei luettu";
+                        if (document.get("readdate") != null) {
+                            paivays = document.get("readdate", Date.class).toString();
+                        }
+                        palautettava.add(new Vinkki(document.get("_id", ObjectId.class), document.get("title",
+                                String.class),
+                                document.get("link", String.class), document.get("description",
+                                String.class),
+                                document.getList("tags", String.class), paivays, document.get("creationDate",
+                                Date.class)));
+                    });
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
         return palautettava;
-
     }
 
     @Override
@@ -218,29 +239,6 @@ public class MongoVinkkiDao implements VinkkiDao {
     }
 
     @Override
-    public List<Vinkki> searchByTag(String findme) {
-        List<Vinkki> palautettava = new ArrayList<>();
-        try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
-            MongoCollection<Document> haetut = database.getCollection(collection);
-
-            haetut.find(eq("tags", findme)).forEach((Consumer<Document>) doc -> {
-                String paivays = "Ei luettu";
-                if (doc.get("readdate") != null) {
-                    paivays = doc.get("readdate", Date.class).toString();
-                }
-                palautettava.add(new Vinkki(doc.get("_id", ObjectId.class), doc.get("title", String.class),
-                        doc.get("link", String.class), doc.get("description", String.class),
-                        doc.getList("tags", String.class), paivays, doc.get("creationDate", Date.class)));
-            });
-            mongoClient.close();
-        } catch (Exception e) {
-            System.out.println("Error in findByTag: " + e.getMessage());
-        }
-        return palautettava;
-    }
-
-    @Override
     public void markAsRead(Vinkki vinkki) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("lukuvinkkikone");
@@ -275,7 +273,7 @@ public class MongoVinkkiDao implements VinkkiDao {
         }
     }
 
-    // hakee ja palauttaa kokonaisen vinkin nimen perusteella
+    // hakee ja palauttaa ensimmäisen osuman nimen perusteella, etsitään aiempia kopioita
     @Override
     public Vinkki getByTitle(String title) {
         Vinkki v = new Vinkki();
