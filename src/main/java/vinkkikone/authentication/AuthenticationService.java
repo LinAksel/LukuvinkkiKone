@@ -20,7 +20,7 @@ public class AuthenticationService {
     }
 
     public Vinkki getByTitle(String title) {
-        return vinkkiDao.getByTitle(title);
+        return vinkkiDao.findByTitle(title);
     }
 
     public List<Vinkki> getByTag(String tag) {
@@ -68,7 +68,8 @@ public class AuthenticationService {
 
         if (status.isOk()) {
             status.addNote("Lisääminen onnistui!");
-            Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split(",")));
+            //Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split(",")));
+            Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split("\\s*,\\s*")));
             vinkkiDao.add(v);
         }
 

@@ -12,8 +12,6 @@ public interface VinkkiDao {
 
     Vinkki findById(ObjectId id);
     
-    Vinkki getByTitle(String title);  //etsi vinkki täydellisen nimen mukaan
-
     void add(Vinkki vinkki);
 
     void update(Vinkki vinkki);
