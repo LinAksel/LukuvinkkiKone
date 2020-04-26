@@ -47,7 +47,7 @@ public class Main {
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
-        //merkitään luetuksi tai poistetaan merkintä
+        // merkitään luetuksi tai poistetaan merkintä
         post("/list", (request, response) -> {
             System.out.println("tulin lisäämään lukumerkinnän");
             String title = request.queryParams("readDateTitle");
@@ -61,7 +61,7 @@ public class Main {
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
-        //Poista luettu-merkintä
+        // Poista luettu-merkintä
         post("/list1", (request, response) -> {
             System.out.println("tulin poistamaan lukumerkintää");
             HashMap<String, Object> model = new HashMap<>();
@@ -75,7 +75,17 @@ public class Main {
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
-        //add
+        post("/listTag", (request, response) -> {
+            HashMap<String, Object> model = new HashMap<>();
+            String tag = request.queryParams("tagSearchField");
+            List<Vinkki> lista = authenticationService().getByTag(tag);
+            model.put("list", lista);
+            model.put("searchTag", tag);
+            model.put("template", "templates/list.html");
+            return new ModelAndView(model, LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        // add
         get("/addnew", (request, response) -> {
             HashMap<String, String> model = new HashMap<>();
             model.put("template", "templates/addnew.html");
