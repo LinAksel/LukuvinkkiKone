@@ -37,20 +37,22 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void canClearCollection() {
+    public void mongoCanClearCollection() {
         this.md.clearCollection();
         assertEquals(0, md.listAll().size());
+        this.md.clearCollection();
     }
 
     @Test
-    public void canGetEmptyListFromDbWithNoEntries() {
+    public void mongoCanGetEmptyListFromDbWithNoEntries() {
         this.md.clearCollection();
         List<Vinkki> lista = md.listAll();
         assertEquals(0, lista.size());
+        this.md.clearCollection();
     }
 
     @Test
-    public void canInsertOneEntryAndListGrows() {
+    public void mongoCanInsertOneEntryAndListGrows() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         assertEquals(1, md.listAll().size());
@@ -58,7 +60,7 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void canInsertOneEntryAndFindItWithRightInfo() {
+    public void mongoCanInsertOneEntryAndFindItWithRightInfo() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         List<Vinkki> lista = md.listAll();
@@ -71,7 +73,7 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void canInsertOneEntryWithCustomConstructorAndItGetsObjectId() {
+    public void mongoCanInsertOneEntryWithCustomConstructorAndItGetsObjectId() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         assertEquals(ObjectId.class, md.listAll().get(0).getMongoId().getClass());
@@ -79,7 +81,7 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void canInsertMultipleEntriesWithCustomConstructorAndListGrows() {
+    public void mongoCanInsertMultipleEntriesWithCustomConstructorAndListGrows() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         md.add(new Vinkki("titteli2", "linkki2", "some kind of description", new ArrayList<>()));
@@ -90,17 +92,18 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void readEntryGetsValidReaddate() {
+    public void mongoReadEntryGetsValidReaddate() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         Vinkki vinkki = md.listAll().get(0);
         md.markAsRead(vinkki);
         vinkki = md.listAll().get(0);
         assertNotEquals("Ei luettu", vinkki.getReadDate());
+        this.md.clearCollection();
     }
 
     @Test
-    public void canInsertOneEntryAndFindItByTitle() {
+    public void mongoCanInsertOneEntryAndFindItByTitle() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         assertEquals("titteli", md.findByTitle("titteli").getTitle());
@@ -108,7 +111,7 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void canInsertOneEntryAndFindItByTitleWithReadDate() {
+    public void mongoCanInsertOneEntryAndFindItByTitleWithReadDate() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         md.markAsRead(md.findByTitle("titteli"));
@@ -117,17 +120,177 @@ public class MongoVinkkiDaoTest {
     }
 
     @Test
-    public void canFindById() {
+    public void mongoCanFindById() {
+        this.md.clearCollection();
         md.add(new Vinkki("Title", "Link", "Joku kuvaus", new ArrayList<>()));
         Vinkki vinkki = md.listAll().get(0);
         assertEquals(vinkki, md.findById(vinkki.getMongoId()));
+        this.md.clearCollection();
+    }
+    @Test
+    public void mongoFindByIdReturnsNullIfNotFound() {
+        this.md.clearCollection();
+        md.add(new Vinkki("Title", "Link", "Joku kuvaus", new ArrayList<>()));
+        assertEquals(null, md.findById(new ObjectId("507f191e810c19729de860ea")));
+        this.md.clearCollection();
     }
 
     @Test
-    public void canInsertOneEntryAndNotFindItByWrongTitle() {
+    public void mongoCanInsertOneEntryAndNotFindItByWrongTitle() {
         this.md.clearCollection();
         md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
         assertEquals(null, md.findByTitle("linkki"));
         this.md.clearCollection();
     }
+
+    @Test
+    public void mongoUpdateChangesValues() {
+        this.md.clearCollection();
+        md.add(new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>()));
+        Vinkki haettu = md.findByTitle("titteli");
+        haettu.setLink("uusilinkki");
+        haettu.setTitle("uusititteli");
+
+        // update vaatii id:n!!
+        md.update(haettu);
+        haettu = md.findByTitle("uusititteli");
+
+        assertEquals("uusititteli", haettu.getTitle());
+        assertEquals("uusilinkki", haettu.getLink());
+        assertEquals(null, md.findByTitle("titteli"));
+        this.md.clearCollection();
+    }
+
+    @Test
+    public void mongoUpdateReturnsWithMissingId() {
+        this.md.clearCollection();
+        Vinkki v = new Vinkki("titteli", "linkki", "some kind of description", new ArrayList<>());
+        md.add(v);
+        v.setTitle("new title");
+        md.update(v);
+        assertEquals(null, md.findByTitle("new title"));
+        this.md.clearCollection();
+    }
+
+    @Test
+    public void mongoSearchByTitleAndTagReturnsEmptyListIfNotFound() {
+        this.md.clearCollection();
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        //System.out.println(this.md.searchByTitleAndTag("ei", "loydy"));
+        List<Vinkki> vertailtava = new ArrayList<>();
+        assertEquals(vertailtava, this.md.searchByTitleAndTag("ei", "loydy"));
+        this.md.clearCollection();
+    }
+
+    @Test
+    public void mongoSearchByTitleAndTagReturnsRightVinkkiIfFound() {
+        this.md.clearCollection();
+        List<String> lista = new ArrayList<>();
+        lista.add("tagi");
+
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        md.add(new Vinkki("joku titteli2", "linkki2", "some kind of description", lista));
+        md.add(new Vinkki("joku titteli3", "linkki3", "some kind of description", lista));
+        lista.add("etsi");
+        Vinkki v = new Vinkki("joku tittelein", "linkein", "some kind of description", lista);
+        md.add(v);
+        assertNotNull(this.md.searchByTitleAndTag("joku", "etsi"));
+        this.md.clearCollection();
+    }
+    @Test
+    public void mongoSearchByTagReturnsEmptyListIfNotFound() {
+        this.md.clearCollection();
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        List<Vinkki> vertailtava = new ArrayList<>();
+        assertEquals(vertailtava, this.md.searchByTag("eiloydy"));
+        this.md.clearCollection();
+    }
+
+    @Test
+    public void mongoSearchByTagReturnsRightVinkkiIfFound() {
+        this.md.clearCollection();
+        List<String> lista = new ArrayList<>();
+        lista.add("tagi");
+
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        md.add(new Vinkki("joku titteli2", "linkki2", "some kind of description", lista));
+        md.add(new Vinkki("joku titteli3", "linkki3", "some kind of description", lista));
+        lista.add("etsi");
+        Vinkki v = new Vinkki("joku tittelein", "linkein", "some kind of description", lista);
+        md.add(v);
+        List<Vinkki> vertailtava = new ArrayList<>();
+        assertNotEquals(vertailtava, this.md.searchByTag("etsi"));
+        this.md.clearCollection();
+    }
+    @Test
+    public void mongoSearchByTagReturnsMultipleMatches() {
+        this.md.clearCollection();
+        List<String> lista = new ArrayList<>();
+        lista.add("tagi");
+
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        md.add(new Vinkki("joku titteli2", "linkki2", "some kind of description", lista));
+        lista.add("etsi");
+        md.add(new Vinkki("joku titteli3", "linkki3", "some kind of description", lista));
+        Vinkki v = new Vinkki("joku tittelein", "linkein", "some kind of description", lista);
+        md.add(v);
+        List<Vinkki> vertailtava = new ArrayList<>();
+        assertEquals(2, this.md.searchByTag("etsi").size());
+        this.md.clearCollection();
+    }
+    @Test
+    public void mongoSearchByTitleReturnsEmptyListIfNotFound() {
+        this.md.clearCollection();
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        List<Vinkki> vertailtava = new ArrayList<>();
+        assertEquals(vertailtava, this.md.searchByTitle("eiloydy"));
+        this.md.clearCollection();
+    }
+
+    @Test
+    public void mongoSearchByTitleReturnsRightVinkkiIfFound() {
+        this.md.clearCollection();
+        List<String> lista = new ArrayList<>();
+        lista.add("tagi");
+
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        md.add(new Vinkki("joku titteli2", "linkki2", "some kind of description", lista));
+        md.add(new Vinkki("joku titteli3", "linkki3", "some kind of description", lista));
+        lista.add("etsi");
+        Vinkki v = new Vinkki("joku tittelein", "linkein", "some kind of description", lista);
+        md.add(v);
+        List<Vinkki> vertailtava = new ArrayList<>();
+        assertNotEquals(vertailtava, this.md.searchByTitle("tittelein"));
+        this.md.clearCollection();
+    }
+    @Test
+    public void mongoSearchByTitleReturnsMultipleMatches() {
+        this.md.clearCollection();
+        List<String> lista = new ArrayList<>();
+        lista.add("tagi");
+
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", new ArrayList<>()));
+        md.add(new Vinkki("joku titteli2", "linkki2", "some kind of description", lista));
+        lista.add("etsi");
+        md.add(new Vinkki("joku titteli3", "linkki3", "some kind of description", lista));
+        Vinkki v = new Vinkki("joku tittelein", "linkein", "some kind of description", lista);
+        md.add(v);
+        //System.out.println(this.md.searchByTitle("joku"));
+        assertEquals(4, this.md.searchByTitle("joku").size());
+        this.md.clearCollection();
+    }
+    
+    @Test
+    public void mongoMarkAsUnreadWorksWhenDocumentExists() {
+        this.md.clearCollection();
+        List<String> lista = new ArrayList<>();
+        lista.add("tagi");
+        md.add(new Vinkki("joku titteli", "linkki", "some kind of description", lista));
+        assertEquals("Ei luettu", md.findByTitle("joku titteli").getReadDate());
+        md.markAsRead(md.findByTitle("joku titteli"));
+        assertNotEquals("Ei luettu", md.findByTitle("joku titteli").getReadDate());
+        md.markAsUnread(md.findByTitle("joku titteli"));
+        assertEquals("Ei luettu", md.findByTitle("joku titteli").getReadDate());
+    }
+
 }

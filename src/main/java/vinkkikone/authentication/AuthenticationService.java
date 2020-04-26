@@ -23,7 +23,7 @@ public class AuthenticationService {
     }
 
     public Vinkki getByTitle(String title) {
-        return vinkkiDao.getByTitle(title);
+        return vinkkiDao.findByTitle(title);
     }
 
     public List<Vinkki> getByTag(String tag) {
@@ -42,10 +42,6 @@ public class AuthenticationService {
 
         CreationStatus status = new CreationStatus();
 
-        if (description == null || description.isEmpty()) {
-            status.addError("Kuvausta ei ole annettu.");
-            return status;
-        }
 
         if (tags == null || tags.isEmpty()) {
             status.addError("Tägejä ei ole annettu.");
@@ -80,7 +76,8 @@ public class AuthenticationService {
 
         if (status.isOk()) {
             status.addNote("Lisääminen onnistui!");
-            Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split(",")));
+            //Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split(",")));
+            Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split("\\s*,\\s*")));
             vinkkiDao.add(v);
         }
 

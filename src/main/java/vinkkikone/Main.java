@@ -50,7 +50,7 @@ public class Main {
             return new ModelAndView(model, LAYOUT);
         }, new VelocityTemplateEngine());
 
-        // merkitään luetuksi tai poistetaan merkintä
+        // merkitään luetuksi
         post("/list", (request, response) -> {
             System.out.println("tulin lisäämään lukumerkinnän "+ request.queryParams("readId"));
             ObjectId id = new ObjectId(request.queryParams("readId"));
@@ -161,8 +161,7 @@ public class Main {
             String mongoUser = properties.getProperty("user");
             String mongoPW = properties.getProperty("password");
             String mongoURL = properties.getProperty("url");
-            // System.out.println("palautetaan url: mongodb+srv://" + mongoUser + ":" +
-            // mongoPW + "@" + mongoURL + "/");
+
             return "mongodb+srv://" + mongoUser + ":" + mongoPW + "@" + mongoURL + "/";
 
         } catch (Exception e) {
