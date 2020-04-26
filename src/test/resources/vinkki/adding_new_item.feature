@@ -16,11 +16,6 @@ Feature: A user can add a new item with a valid title
         When title "Pa", link "http://www.gutenberg.org/ebooks/48623", description "Most awesome book ever" and tags "humour, tragedy" are given
         Then system will respond with "Nimen pitää olla vähintään kolme merkkiä pitkä!"
 
-    Scenario: user can not add an empty description
-        Given add new is selected
-        When title "Paroni von Münchhausen", link "http://www.gutenberg.org/ebooks/48623", description "" and tags "humour, tragedy" are given
-        Then system will respond with "Kuvausta ei ole annettu."
-
     
     Scenario: user can not add an empty tags String
         Given add new is selected
