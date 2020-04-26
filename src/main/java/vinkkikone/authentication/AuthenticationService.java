@@ -34,10 +34,6 @@ public class AuthenticationService {
 
         CreationStatus status = new CreationStatus();
 
-        if (description == null || description.isEmpty()) {
-            status.addError("Kuvausta ei ole annettu.");
-            return status;
-        }
 
         if (tags == null || tags.isEmpty()) {
             status.addError("Tägejä ei ole annettu.");
