@@ -27,6 +27,8 @@ public interface VinkkiDao {
     List<Vinkki> searchByTitle(String title); //etsi pelkällä otsikolla
     
     List<Vinkki> searchByTitleAndTag(String title, String tag); //etsi molemmilla
+
+    
     
     // LUETTU merkkaukset
 

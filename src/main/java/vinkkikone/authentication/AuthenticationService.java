@@ -2,6 +2,9 @@ package vinkkikone.authentication;
 
 import vinkkikone.domain.Vinkki;
 import java.util.List;
+
+import org.bson.types.ObjectId;
+
 import java.util.Arrays;
 import vinkkikone.util.CreationStatus;
 import vinkkikone.data_access.VinkkiDao;
@@ -26,6 +29,11 @@ public class AuthenticationService {
     public List<Vinkki> getByTag(String tag) {
         return vinkkiDao.searchByTag(tag);
     }
+    
+    public Vinkki getById(ObjectId id) {
+        return vinkkiDao.findById(id);
+    }
+
 
     public CreationStatus createNew(String title, String link, String description, String tags) {
         // if (readDate == null) {

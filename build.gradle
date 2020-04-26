@@ -55,6 +55,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
     compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+//compile group: 'org.slf4j',name: 'slf4j-simple', version: '1.6.1'	
 }
 
 test {

@@ -36,7 +36,7 @@
             <div class="listitemRead" id="notread">
                 <p>Ei luettu</p>
                 <form id="readForm" action="/list" method="POST" name="readForm">
-                    <input type="hidden" id="readDateTitle" name="readDateTitle" value=$vinkki.title>
+                    <input type="hidden" id="readId" name="readId" value=$vinkki.mongoId>
                     <input id="readSend" type="submit" value="Merkitse luetuksi" />
                 </form><br>
             </div>
@@ -44,7 +44,7 @@
             <div class="listitemRead" id="read">
                 <p>Luettu: $vinkki.readDate</p>
                 <form id="notReadForm" action="/list1" method="POST">
-                    <input type="hidden" id="removeReadDate" name="removeReadDate" value=$vinkki.title>
+                    <input type="hidden" id="readId" name="readId" value=$vinkki.mongoId>
                     <input id="notReadSend" type="submit" value="Poista lukupäivämäärä" />
                 </form><br>
                 #end
