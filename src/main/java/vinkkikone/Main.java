@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 import vinkkikone.domain.*;
 import java.util.Properties;
+
+import org.bson.types.ObjectId;
+
 import vinkkikone.authentication.AuthenticationService;
 //import vinkkikone.data_access.FileVinkkiDao;
 import vinkkikone.util.CreationStatus;
@@ -49,10 +52,10 @@ public class Main {
 
         // merkitään luetuksi
         post("/list", (request, response) -> {
-            System.out.println("tulin lisäämään lukumerkinnän");
-            String title = request.queryParams("readDateTitle");
-            System.out.println("title: " + title);
-            Vinkki v = authenticationService().getByTitle(title);
+            System.out.println("tulin lisäämään lukumerkinnän "+ request.queryParams("readId"));
+            ObjectId id = new ObjectId(request.queryParams("readId"));
+            //System.out.println("title: " + id);
+            Vinkki v = authenticationService().getById(id);
             dao.markAsRead(v);
             HashMap<String, Object> model = new HashMap<>();
             List<Vinkki> lista = authenticationService().getList();
@@ -65,9 +68,9 @@ public class Main {
         post("/list1", (request, response) -> {
             System.out.println("tulin poistamaan lukumerkintää");
             HashMap<String, Object> model = new HashMap<>();
-            String title = request.queryParams("removeReadDate");
-            System.out.println("title: " + title);
-            Vinkki v = authenticationService().getByTitle(title);
+            ObjectId id = new ObjectId(request.queryParams("readId"));
+            //System.out.println("title: " + title);
+            Vinkki v = authenticationService().getById(id);
             dao.markAsUnread(v);
             List<Vinkki> lista = authenticationService().getList();
             model.put("list", lista);
