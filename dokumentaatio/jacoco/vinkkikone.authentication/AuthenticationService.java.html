@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthenticationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LukuvinkkiKone</a> &gt; <a href="index.source.html" class="el_package">vinkkikone.authentication</a> &gt; <span class="el_source">AuthenticationService.java</span></div><h1>AuthenticationService.java</h1><pre class="source lang-java linenums">package vinkkikone.authentication;
+
+import vinkkikone.domain.Vinkki;
+import java.util.List;
+
+import org.bson.types.ObjectId;
+
+import java.util.Arrays;
+import vinkkikone.util.CreationStatus;
+import vinkkikone.data_access.VinkkiDao;
+
+public class AuthenticationService {
+
+    private final VinkkiDao vinkkiDao;
+
+<span class="fc" id="L16">    public AuthenticationService(VinkkiDao vD) {</span>
+<span class="fc" id="L17">        this.vinkkiDao = vD;</span>
+<span class="fc" id="L18">    }</span>
+
+    // Tää metodi kaipaa vielä statuserror-käsittelyä createNew-tyylisesti!
+    public List&lt;Vinkki&gt; getList() {
+<span class="fc" id="L22">        return vinkkiDao.listAll();</span>
+    }
+
+    public Vinkki getByTitle(String title) {
+<span class="nc" id="L26">        return vinkkiDao.findByTitle(title);</span>
+    }
+
+    public List&lt;Vinkki&gt; getByTag(String tag) {
+<span class="fc" id="L30">        return vinkkiDao.searchByTag(tag);</span>
+    }
+    
+    public Vinkki getById(ObjectId id) {
+<span class="nc" id="L34">        return vinkkiDao.findById(id);</span>
+    }
+
+
+    public CreationStatus createNew(String title, String link, String description, String tags) {
+        // if (readDate == null) {
+        // readDate = &quot;Ei luettu&quot;;
+        // }
+
+<span class="fc" id="L43">        CreationStatus status = new CreationStatus();</span>
+
+
+<span class="pc bpc" id="L46" title="1 of 4 branches missed.">        if (tags == null || tags.isEmpty()) {</span>
+<span class="fc" id="L47">            status.addError(&quot;Tägejä ei ole annettu.&quot;);</span>
+<span class="fc" id="L48">            return status;</span>
+        }
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (vinkkiDao.findByTitle(title) != null) {</span>
+<span class="fc" id="L52">            status.addError(&quot;Teokselle on jo luotu vinkki!&quot;);</span>
+<span class="fc" id="L53">            return status;</span>
+        }
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (title.length() &lt; 3) {</span>
+<span class="fc" id="L57">            status.addError(&quot;Nimen pitää olla vähintään kolme merkkiä pitkä!&quot;);</span>
+<span class="fc" id="L58">            return status;</span>
+        }
+
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">        if (link == null || link.isEmpty()) {</span>
+<span class="fc" id="L62">            status.addError(&quot;Vinkillä pitää olla myös linkki!&quot;);</span>
+<span class="fc" id="L63">            return status;</span>
+        }
+
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">        if (!link.contains(&quot;www.&quot;) &amp;&amp; !link.contains(&quot;https://&quot;)) {</span>
+<span class="fc" id="L67">            status.addError(&quot;Anna linkki oikeassa muodossa! https://... tai www...&quot;);</span>
+<span class="fc" id="L68">            return status;</span>
+        }
+
+<span class="pc bpc" id="L71" title="2 of 6 branches missed.">        if (!tags.contains(&quot;Tägejä ei ole annettu.&quot;) &amp;&amp; (tags.contains(&quot; &quot;) &amp;&amp; (!tags.contains(&quot;,&quot;)))) {</span>
+<span class="fc" id="L72">            status.addError(</span>
+                    &quot;Anna tägejä enemmän kuin yksi. Tägit pitää erottaa pilkulla! Käytä vain yksisanaisia tägejä.&quot;);
+<span class="fc" id="L74">            return status;</span>
+        }
+
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (status.isOk()) {</span>
+<span class="fc" id="L78">            status.addNote(&quot;Lisääminen onnistui!&quot;);</span>
+            //Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split(&quot;,&quot;)));
+<span class="fc" id="L80">            Vinkki v = new Vinkki(title, link, description, Arrays.asList(tags.split(&quot;\\s*,\\s*&quot;)));</span>
+<span class="fc" id="L81">            vinkkiDao.add(v);</span>
+        }
+
+<span class="fc" id="L84">        return status;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

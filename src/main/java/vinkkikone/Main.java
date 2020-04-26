@@ -52,9 +52,9 @@ public class Main {
 
         // merkitään luetuksi
         post("/list", (request, response) -> {
-            System.out.println("tulin lisäämään lukumerkinnän "+ request.queryParams("readId"));
+            System.out.println("tulin lisäämään lukumerkinnän " + request.queryParams("readId"));
             ObjectId id = new ObjectId(request.queryParams("readId"));
-            //System.out.println("title: " + id);
+            // System.out.println("title: " + id);
             Vinkki v = authenticationService().getById(id);
             dao.markAsRead(v);
             HashMap<String, Object> model = new HashMap<>();
@@ -69,7 +69,7 @@ public class Main {
             System.out.println("tulin poistamaan lukumerkintää");
             HashMap<String, Object> model = new HashMap<>();
             ObjectId id = new ObjectId(request.queryParams("readId"));
-            //System.out.println("title: " + title);
+            // System.out.println("title: " + title);
             Vinkki v = authenticationService().getById(id);
             dao.markAsUnread(v);
             List<Vinkki> lista = authenticationService().getList();
@@ -82,6 +82,7 @@ public class Main {
             HashMap<String, Object> model = new HashMap<>();
             String tag = request.queryParams("tagSearchField");
             List<Vinkki> lista = authenticationService().getByTag(tag);
+            tag = tag.toLowerCase();
             model.put("list", lista);
             model.put("searchTag", tag);
             model.put("template", "templates/list.html");
@@ -101,6 +102,7 @@ public class Main {
             String link = request.queryParams("link");
             String description = request.queryParams("description");
             String tags = request.queryParams("tags");
+            tags = tags.toLowerCase();
             String readDate = request.queryParams("readDate");
 
             CreationStatus status = authenticationService().createNew(title, link, description, tags);

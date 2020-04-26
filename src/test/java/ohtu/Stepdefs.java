@@ -103,13 +103,11 @@ public class Stepdefs {
         pageHasContent(tagi);
     }
 
-    // Tyhjän tägin testi, jossa oli Then-vaiheessa kryptinen ongelma, tähän paluu
-    // sunnuntaina
-    // @When("empty tag is entered")
-    // public void emptyTagIsEntered() {
-    // WebElement element = driver.findElement(By.name("search"));
-    // element.submit();
-    // }
+    @When("empty tag is entered")
+    public void emptyTagIsEntered() {
+        WebElement element = driver.findElement(By.name("search"));
+        element.submit();
+    }
 
     @After
     public void tearDown() {
