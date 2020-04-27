@@ -12,4 +12,4 @@
 + [Sovellus Herokussa](https://ohtu-lukuvinkkikone.herokuapp.com/)
 + [CircleCI](https://circleci.com/gh/LinAksel/LukuvinkkiKone) [![CircleCI](https://circleci.com/gh/LinAksel/LukuvinkkiKone.svg?style=svg)](https://circleci.com/gh/LinAksel/LukuvinkkiKone)
 + [DoD](dokumentaatio/dodone.md)
-+ [Jacoco-raportti](https://htmlpreview.github.io/?https://github.com/LinAksel/LukuvinkkiKone/blob/tests-and-tag-fix-feature/dokumentaatio/jacoco/index.html)
++ [Jacoco-raportti](https://htmlpreview.github.io/?https://github.com/LinAksel/LukuvinkkiKone/tree/master/dokumentaatio/jacoco/index.html)
