@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MongoVinkkiDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">LukuvinkkiKone</a> &gt; <a href="index.source.html" class="el_package">vinkkikone.data_access</a> &gt; <span class="el_source">MongoVinkkiDao.java</span></div><h1>MongoVinkkiDao.java</h1><pre class="source lang-java linenums">package vinkkikone.data_access;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.currentDate;
+import static com.mongodb.client.model.Updates.set;
+import static com.mongodb.client.model.Updates.unset;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Consumer;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import vinkkikone.domain.Vinkki;
+
+public class MongoVinkkiDao implements VinkkiDao {
+
+    // date muunnokset:
+    // https://www.baeldung.com/java-string-to-date
+    // https://www.baeldung.com/java-date-to-localdate-and-localdatetime &lt;---!!!!
+    private final String url;
+    private final String collection;
+
+    public MongoVinkkiDao(String url) {
+<span class="nc" id="L31">        this(url, &quot;vinkit&quot;);</span>
+<span class="nc" id="L32">    }</span>
+
+<span class="fc" id="L34">    public MongoVinkkiDao(String url, String collection) {</span>
+<span class="fc" id="L35">        this.url = url;</span>
+<span class="fc" id="L36">        this.collection = collection;</span>
+<span class="fc" id="L37">    }</span>
+
+    @Override
+    public void add(Vinkki vinkki) {
+<span class="fc" id="L41">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L42">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L43">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+
+<span class="fc" id="L45">            Document document = new Document(&quot;title&quot;, vinkki.getTitle()).append(&quot;link&quot;, vinkki.getLink())</span>
+<span class="fc" id="L46">                    .append(&quot;description&quot;, vinkki.getDescription()).append(&quot;tags&quot;, vinkki.getTagsList());</span>
+
+<span class="fc" id="L48">            haetut.insertOne(document);</span>
+<span class="fc" id="L49">            haetut.updateOne(eq(&quot;title&quot;, vinkki.getTitle()), currentDate(&quot;creationDate&quot;));</span>
+
+<span class="fc" id="L51">            mongoClient.close();</span>
+<span class="nc" id="L52">        } catch (Exception e) {</span>
+<span class="nc" id="L53">            System.out.println(&quot;Error creating Vinkki: &quot; + e.getMessage());</span>
+<span class="fc" id="L54">        }</span>
+
+<span class="fc" id="L56">    }</span>
+
+    @Override
+    public List&lt;Vinkki&gt; listAll() {
+<span class="fc" id="L60">        List&lt;Vinkki&gt; palautettava = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L62">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L63">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L64">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+
+<span class="fc" id="L66">            haetut.find().sort(new Document(&quot;creationDate&quot;, -1)).forEach((Consumer&lt;Document&gt;) doc -&gt; {</span>
+<span class="fc" id="L67">                String paivays = &quot;Ei luettu&quot;;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                if (doc.get(&quot;readdate&quot;) != null) {</span>
+<span class="fc" id="L69">                    paivays = doc.get(&quot;readdate&quot;, Date.class).toString();</span>
+                }
+<span class="fc" id="L71">                palautettava.add(new Vinkki(doc.get(&quot;_id&quot;, ObjectId.class), doc.get(&quot;title&quot;, String.class),</span>
+<span class="fc" id="L72">                        doc.get(&quot;link&quot;, String.class), doc.get(&quot;description&quot;, String.class),</span>
+<span class="fc" id="L73">                        doc.getList(&quot;tags&quot;, String.class), paivays, doc.get(&quot;creationDate&quot;, Date.class)));</span>
+<span class="fc" id="L74">            });</span>
+<span class="fc" id="L75">            mongoClient.close();</span>
+<span class="nc" id="L76">        } catch (Exception e) {</span>
+<span class="nc" id="L77">            System.out.println(&quot;Error listing all Vinkki: &quot; + e.getMessage());</span>
+<span class="fc" id="L78">        }</span>
+<span class="fc" id="L79">        return palautettava;</span>
+    }
+
+    @Override
+    public Vinkki findByTitle(String title) {
+
+<span class="fc" id="L85">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L86">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L87">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+<span class="fc" id="L88">            Document document = haetut.find(eq(&quot;title&quot;, title)).first();</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">            if (document == null) {</span>
+<span class="fc" id="L90">                mongoClient.close();</span>
+<span class="fc" id="L91">                return null;</span>
+            }
+<span class="fc" id="L93">            String paivays = &quot;Ei luettu&quot;;</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            if (document.get(&quot;readdate&quot;) != null) {</span>
+<span class="fc" id="L95">                paivays = document.get(&quot;readdate&quot;, Date.class).toString();</span>
+            }
+<span class="fc" id="L97">            return new Vinkki(document.get(&quot;_id&quot;, ObjectId.class), document.get(&quot;title&quot;, String.class),</span>
+<span class="fc" id="L98">                    document.get(&quot;link&quot;, String.class), document.get(&quot;description&quot;, String.class),</span>
+<span class="fc" id="L99">                    document.getList(&quot;tags&quot;, String.class), paivays, document.get(&quot;creationDate&quot;, Date.class));</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        } catch (Exception e) {</span>
+<span class="nc" id="L101">            System.out.println(&quot;Error: &quot; + e.getMessage());</span>
+        }
+<span class="nc" id="L103">        return null;</span>
+
+    }
+
+    @Override
+    public List&lt;Vinkki&gt; searchByTag(String findme) {
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (findme.isEmpty()) {</span>
+<span class="nc" id="L110">            return this.listAll();</span>
+        }
+<span class="fc" id="L112">        List&lt;Vinkki&gt; palautettava = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L113">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L114">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L115">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+<span class="fc" id="L116">            haetut.find(eq(&quot;tags&quot;, findme)).forEach((Consumer&lt;Document&gt;) doc -&gt; {</span>
+<span class="fc" id="L117">                String paivays = &quot;Ei luettu&quot;;</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">                if (doc.get(&quot;readdate&quot;) != null) {</span>
+<span class="nc" id="L119">                    paivays = doc.get(&quot;readdate&quot;, Date.class).toString();</span>
+                }
+<span class="fc" id="L121">                palautettava.add(new Vinkki(doc.get(&quot;_id&quot;, ObjectId.class), doc.get(&quot;title&quot;, String.class),</span>
+<span class="fc" id="L122">                        doc.get(&quot;link&quot;, String.class), doc.get(&quot;description&quot;, String.class),</span>
+<span class="fc" id="L123">                        doc.getList(&quot;tags&quot;, String.class), paivays, doc.get(&quot;creationDate&quot;, Date.class)));</span>
+<span class="fc" id="L124">            });</span>
+<span class="fc" id="L125">            mongoClient.close();</span>
+<span class="nc" id="L126">        } catch (Exception e) {</span>
+<span class="nc" id="L127">            System.out.println(&quot;Error in findByTag: &quot; + e.getMessage());</span>
+<span class="nc" id="L128">            return new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L129">        }</span>
+<span class="fc" id="L130">        return palautettava;</span>
+    }
+
+    // Jos tekee search toiminnon kuvauksille pitää index:iä muuttaa mongosta
+
+    public List&lt;Vinkki&gt; searchByTitle(String title) {
+<span class="fc" id="L136">        List&lt;Vinkki&gt; palautettava = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L137">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L138">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L139">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+<span class="fc" id="L140">            haetut.find(Filters.text(title)).forEach((Consumer&lt;Document&gt;) document -&gt; {</span>
+<span class="fc" id="L141">                String paivays = &quot;Ei luettu&quot;;</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">                if (document.get(&quot;readdate&quot;) != null) {</span>
+<span class="nc" id="L143">                    paivays = document.get(&quot;readdate&quot;, Date.class).toString();</span>
+                }
+<span class="fc" id="L145">                palautettava.add(new Vinkki(document.get(&quot;_id&quot;, ObjectId.class), document.get(&quot;title&quot;, String.class),</span>
+<span class="fc" id="L146">                        document.get(&quot;link&quot;, String.class), document.get(&quot;description&quot;, String.class),</span>
+<span class="fc" id="L147">                        document.getList(&quot;tags&quot;, String.class), paivays, document.get(&quot;creationDate&quot;, Date.class)));</span>
+<span class="fc" id="L148">            });</span>
+<span class="nc" id="L149">        } catch (Exception e) {</span>
+<span class="nc" id="L150">            System.out.println(&quot;Error: &quot; + e.getMessage());</span>
+<span class="fc" id="L151">        }</span>
+<span class="fc" id="L152">        return palautettava;</span>
+
+    }
+
+    public List&lt;Vinkki&gt; searchByTitleAndTag(String title, String tag) {
+<span class="fc" id="L157">        List&lt;Vinkki&gt; palautettava = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L158">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L159">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L160">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+<span class="fc" id="L161">            haetut.find(and(Filters.text(title), in(&quot;tags&quot;, tag))).forEach((Consumer&lt;Document&gt;) document -&gt; {</span>
+<span class="fc" id="L162">                String paivays = &quot;Ei luettu&quot;;</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">                if (document.get(&quot;readdate&quot;) != null) {</span>
+<span class="nc" id="L164">                    paivays = document.get(&quot;readdate&quot;, Date.class).toString();</span>
+                }
+<span class="fc" id="L166">                palautettava.add(new Vinkki(document.get(&quot;_id&quot;, ObjectId.class), document.get(&quot;title&quot;, String.class),</span>
+<span class="fc" id="L167">                        document.get(&quot;link&quot;, String.class), document.get(&quot;description&quot;, String.class),</span>
+<span class="fc" id="L168">                        document.getList(&quot;tags&quot;, String.class), paivays, document.get(&quot;creationDate&quot;, Date.class)));</span>
+<span class="fc" id="L169">            });</span>
+<span class="nc" id="L170">        } catch (Exception e) {</span>
+<span class="nc" id="L171">            System.out.println(&quot;Error: &quot; + e.getMessage());</span>
+<span class="fc" id="L172">        }</span>
+<span class="fc" id="L173">        return palautettava;</span>
+    }
+
+    @Override
+    public Vinkki findById(ObjectId id) {
+<span class="fc" id="L178">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L179">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L180">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+<span class="fc" id="L181">            Document document = haetut.find(eq(&quot;_id&quot;, id)).first();</span>
+
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            if (document == null) {</span>
+<span class="fc" id="L184">                mongoClient.close();</span>
+<span class="fc" id="L185">                return null;</span>
+            }
+<span class="fc" id="L187">            mongoClient.close();</span>
+<span class="fc" id="L188">            String paivays = &quot;Ei luettu&quot;;</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">            if (document.get(&quot;readdate&quot;) != null) {</span>
+<span class="nc" id="L190">                paivays = document.get(&quot;readdate&quot;, Date.class).toString();</span>
+            }
+<span class="fc" id="L192">            Vinkki palautettava = new Vinkki(document.get(&quot;_id&quot;, ObjectId.class), document.get(&quot;title&quot;, String.class),</span>
+<span class="fc" id="L193">                    document.get(&quot;link&quot;, String.class), document.get(&quot;description&quot;, String.class),</span>
+<span class="fc" id="L194">                    document.getList(&quot;tags&quot;, String.class), paivays, document.get(&quot;creationDate&quot;, Date.class));</span>
+<span class="fc" id="L195">            return palautettava;</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        } catch (Exception e) {</span>
+<span class="nc" id="L197">            System.out.println(&quot;Error in findById: &quot; + e.getMessage());</span>
+        }
+<span class="nc" id="L199">        return null;</span>
+
+    }
+
+    // UPDATE jättää creationDaten koskematta
+    @Override
+    public void update(Vinkki vinkki) {
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (vinkki.getMongoId() == null) {</span>
+<span class="fc" id="L207">            return;</span>
+        }
+<span class="fc" id="L209">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L210">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L211">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+
+<span class="fc" id="L213">            haetut.updateOne(eq(&quot;_id&quot;, vinkki.getMongoId()),</span>
+<span class="fc" id="L214">                    combine(set(&quot;title&quot;, vinkki.getTitle()), set(&quot;link&quot;, vinkki.getLink()),</span>
+<span class="fc" id="L215">                            set(&quot;description&quot;, vinkki.getDescription()), set(&quot;tags&quot;, vinkki.getTagsList())));</span>
+<span class="nc" id="L216">        } catch (Exception e) {</span>
+<span class="nc" id="L217">            System.out.println(&quot;Error updating: &quot; + e.getMessage());</span>
+<span class="fc" id="L218">        }</span>
+<span class="fc" id="L219">    }</span>
+
+    @Override
+    public void delete(Vinkki vinkki) {
+<span class="nc" id="L223">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="nc" id="L224">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="nc" id="L225">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+
+<span class="nc" id="L227">            haetut.deleteOne(eq(&quot;_id&quot;, vinkki.getMongoId()));</span>
+
+<span class="nc" id="L229">            mongoClient.close();</span>
+<span class="nc" id="L230">        } catch (Exception e) {</span>
+<span class="nc" id="L231">            System.out.println(&quot;Error deleting vinkki :&quot; + e.getMessage());</span>
+<span class="nc" id="L232">        }</span>
+
+<span class="nc" id="L234">    }</span>
+
+    @Override
+    public void markAsRead(Vinkki vinkki) {
+<span class="fc" id="L238">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L239">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L240">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+
+<span class="fc" id="L242">            haetut.updateOne(eq(&quot;_id&quot;, vinkki.getMongoId()), currentDate(&quot;readdate&quot;));</span>
+
+<span class="nc" id="L244">        } catch (Exception e) {</span>
+<span class="nc" id="L245">            System.out.println(&quot;Error in markAsRead: &quot; + e.getMessage() + &quot; with title: &quot; + vinkki.getTitle());</span>
+<span class="fc" id="L246">        }</span>
+<span class="fc" id="L247">    }</span>
+
+    @Override
+    public void markAsUnread(Vinkki vinkki) {
+<span class="fc" id="L251">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L252">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L253">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+
+<span class="fc" id="L255">            haetut.updateOne(eq(&quot;_id&quot;, vinkki.getMongoId()), unset(&quot;readdate&quot;));</span>
+
+<span class="nc" id="L257">        } catch (Exception e) {</span>
+<span class="nc" id="L258">            System.out.println(&quot;Error in markAsUnread: &quot; + e.getMessage() + &quot; with title: &quot; + vinkki.getTitle());</span>
+<span class="fc" id="L259">        }</span>
+<span class="fc" id="L260">    }</span>
+
+    // erityisesti testaukseen, poistaa kaikki, ei vinkkiDao kautta vaan suoraan
+    public void clearCollection() {
+<span class="fc" id="L264">        try (MongoClient mongoClient = MongoClients.create(url)) {</span>
+<span class="fc" id="L265">            MongoDatabase database = mongoClient.getDatabase(&quot;lukuvinkkikone&quot;);</span>
+<span class="fc" id="L266">            MongoCollection&lt;Document&gt; haetut = database.getCollection(collection);</span>
+<span class="fc" id="L267">            haetut.deleteMany(new Document());</span>
+        }
+<span class="fc" id="L269">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

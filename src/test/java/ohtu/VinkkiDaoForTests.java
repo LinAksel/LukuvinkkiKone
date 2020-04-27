@@ -64,8 +64,18 @@ public class VinkkiDaoForTests implements VinkkiDao {
 
     @Override
     public List<Vinkki> searchByTag(String findme) {
-        // TODO Auto-generated method stub
-        return null;
+        if (findme.isEmpty()) {
+            return vinkit;
+        }
+        List<Vinkki> lista = new ArrayList<>();
+        for (Vinkki v : vinkit) {
+            for (String tag : v.getTagsList()) {
+                if (tag.equals(findme)) {
+                    lista.add(v);
+                }
+            }
+        }
+        return lista;
     }
 
     @Override
@@ -84,7 +94,7 @@ public class VinkkiDaoForTests implements VinkkiDao {
     public List<Vinkki> searchByTitleAndTag(String title, String tag) {
         return null;
     }
-    
+
     @Override
     public List<Vinkki> searchByTitle(String title) {
         return null;
