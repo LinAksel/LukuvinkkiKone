@@ -13,4 +13,4 @@
 + [CircleCI](https://circleci.com/gh/LinAksel/LukuvinkkiKone) [![CircleCI](https://circleci.com/gh/LinAksel/LukuvinkkiKone.svg?style=svg)](https://circleci.com/gh/LinAksel/LukuvinkkiKone)
 + [DoD](dokumentaatio/dodone.md)
 + [Jacoco-raportti](https://htmlpreview.github.io/?https://github.com/LinAksel/LukuvinkkiKone/blob/master/dokumentaatio/jacoco/index.html)
-+ [Loppuraportti]()
++ [Loppuraportti](https://github.com/LinAksel/LukuvinkkiKone/blob/master/dokumentaatio/Ohjelmistotuotantokurssin%20loppuraportti.pdf)
